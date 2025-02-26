@@ -1,24 +1,24 @@
-import "./App.css";
-import { Menu } from "./components/menu";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Footer from "./components/Footer";
 
 function App() {
-  // let lastScrollTop: number;
-  // let navbar = document.getElementById("navbar");
-  // if (navbar)
-  //   window.addEventListener("scroll", function () {
-  //     var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  //     if (scrollTop > lastScrollTop) {
-  //       navbar.style.top = "-80px";
-  //     } else {
-  //       navbar.style.top = "0";
-  //     }
-  //     lastScrollTop = scrollTop;
-  //   });
-
   return (
-    <div>
-      <Menu />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
