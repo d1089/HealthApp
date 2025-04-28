@@ -51,6 +51,12 @@ function App() {
       week9: true,
     },
     {
+      feature: "Blood Report Evaluation",
+      week1: true,
+      week3: true,
+      week9: true,
+    },
+    {
       feature: "Exclusive Discounts till 31st March 25",
       week1: 1999,
       week3: 3999,
