@@ -34,10 +34,10 @@ const Navbar = () => {
             <Link
               to="/pricing"
               className={`${isActive(
-                "/"
+                "/pricing"
               )} font-medium transition-colors duration-200`}
             >
-              Plans
+              Services
             </Link>
             <Link
               to="/about"
