@@ -5,6 +5,7 @@ import { Apple, Menu, X } from "lucide-react";
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path
@@ -47,6 +48,48 @@ const Navbar = () => {
             >
               About
             </Link>
+            <div
+              className="relative"
+              onMouseEnter={() => setIsToolsMenuOpen(true)}
+              onMouseLeave={() => setIsToolsMenuOpen(false)}
+            >
+              <Link
+                to="/tools"
+                className={`${isActive(
+                  "/tools"
+                )} font-medium transition-colors duration-200`}
+              >
+                Tools
+              </Link>
+              {isToolsMenuOpen && (
+                <div className="absolute top-full right-px w-56 bg-white border-t shadow-md">
+                  <Link
+                    to="/tools/body-fat-calculator"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Body Fat Calculator
+                  </Link>
+                  <Link
+                    to="/tools/macronutrient-calculator"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Macronutrient Calculator
+                  </Link>
+                  <Link
+                    to="/tools/nutrition-planner"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Nutrition Planner
+                  </Link>
+                  <Link
+                    to="/tools/meal-planner"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Meal Planner
+                  </Link>
+                </div>
+              )}
+            </div>
             <Link
               to="/contact"
               className={`${isActive(
@@ -92,6 +135,15 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               About
+            </Link>
+            <Link
+              to="/tools"
+              className={`${isActive(
+                "/tools"
+              )} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Tools
             </Link>
             <Link
               to="/contact"
