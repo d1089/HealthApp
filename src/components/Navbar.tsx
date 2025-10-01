@@ -32,6 +32,14 @@ const Navbar = () => {
               Home
             </Link>
             <Link
+              to="/pricing"
+              className={`${isActive(
+                "/pricing"
+              )} font-medium transition-colors duration-200`}
+            >
+              Services
+            </Link>
+            <Link
               to="/about"
               className={`${isActive(
                 "/about"
