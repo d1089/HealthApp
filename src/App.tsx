@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import BodyFatCalculator from "./pages/BodyFatCalculator";
 import BMRCalculator from "./pages/BMRCalculator";
 import OneRmCalculator from "./pages/OneRMCalculator";
+import Pricing from "./components/Pricing";
 // import MacronutrientCalculator from "./pages/MacronutrientCalculator";
 // import NutritionPlanner from "./pages/NutritionPlanner";
 // import NutritionPlanner from "./pages/NutritionPlanner";
