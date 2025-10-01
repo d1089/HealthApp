@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Apple, Menu, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Apple, Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+  const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
+
   const isActive = (path: string) => {
-    return location.pathname === path ? 'text-emerald-500' : 'text-gray-600 hover:text-emerald-500';
+    return location.pathname === path
+      ? "text-emerald-500"
+      : "text-gray-600 hover:text-emerald-500";
   };
 
   return (
@@ -18,26 +21,87 @@ const Navbar = () => {
             <Apple className="h-8 w-8 text-emerald-500" />
             <span className="text-xl font-bold text-gray-800">NutriLife</span>
           </Link>
-          
+
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8">
-            <Link to="/" className={`${isActive('/')} font-medium transition-colors duration-200`}>
+            <Link
+              to="/"
+              className={`${isActive(
+                "/"
+              )} font-medium transition-colors duration-200`}
+            >
               Home
             </Link>
-            <Link to="/about" className={`${isActive('/about')} font-medium transition-colors duration-200`}>
+            <Link
+              to="/about"
+              className={`${isActive(
+                "/about"
+              )} font-medium transition-colors duration-200`}
+            >
               About
             </Link>
-            <Link to="/contact" className={`${isActive('/contact')} font-medium transition-colors duration-200`}>
+            <div
+              className="relative"
+              onMouseEnter={() => setIsToolsMenuOpen(true)}
+              onMouseLeave={() => setIsToolsMenuOpen(false)}
+            >
+              <Link
+                to="/tools"
+                className={`${isActive(
+                  "/tools"
+                )} font-medium transition-colors duration-200`}
+              >
+                Tools
+              </Link>
+              {isToolsMenuOpen && (
+                <div className="absolute top-full right-px w-56 bg-white border-t shadow-md">
+                  <Link
+                    to="/tools/body-fat-calculator"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Body Fat Calculator
+                  </Link>
+                  <Link
+                    to="/tools/macronutrient-calculator"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Macronutrient Calculator
+                  </Link>
+                  <Link
+                    to="/tools/nutrition-planner"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Nutrition Planner
+                  </Link>
+                  <Link
+                    to="/tools/meal-planner"
+                    className="block px-3 py-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-100"
+                  >
+                    Meal Planner
+                  </Link>
+                </div>
+              )}
+            </div>
+            <Link
+              to="/contact"
+              className={`${isActive(
+                "/contact"
+              )} font-medium transition-colors duration-200`}
+            >
               Contact
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             className="md:hidden p-2 rounded-md text-gray-600 hover:text-emerald-500 focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -48,21 +112,36 @@ const Navbar = () => {
           <div className="px-4 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className={`${isActive('/')} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+              className={`${isActive(
+                "/"
+              )} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/about"
-              className={`${isActive('/about')} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+              className={`${isActive(
+                "/about"
+              )} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
             <Link
+              to="/tools"
+              className={`${isActive(
+                "/tools"
+              )} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Tools
+            </Link>
+            <Link
               to="/contact"
-              className={`${isActive('/contact')} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+              className={`${isActive(
+                "/contact"
+              )} block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
