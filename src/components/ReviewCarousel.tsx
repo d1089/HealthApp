@@ -15,7 +15,7 @@ const reviews: Review[] = [
     name: "Sarah Johnson",
     rating: 5,
     comment:
-      "NutriLife has completely transformed my relationship with food. The meal plans are delicious and the nutritional guidance is exceptional!",
+      "Nutripal has completely transformed my relationship with food. The meal plans are delicious and the nutritional guidance is exceptional!",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80",
   },
