@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/home";
@@ -8,6 +7,7 @@ import Footer from "./components/Footer";
 import BodyFatCalculator from "./pages/BodyFatCalculator";
 import BMRCalculator from "./pages/BMRCalculator";
 import OneRmCalculator from "./pages/OneRMCalculator";
+import Pricing from "./components/Pricing";
 // import MacronutrientCalculator from "./pages/MacronutrientCalculator";
 // import NutritionPlanner from "./pages/NutritionPlanner";
 // import NutritionPlanner from "./pages/NutritionPlanner";
@@ -21,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route
             path="/tools/body-fat-calculator"
             element={<BodyFatCalculator />}

@@ -20,13 +20,13 @@ const Home = () => {
     <div className="w-full">
       {/* Hero Section with Parallax */}
       <div
-        className="h-screen bg-fixed bg-center bg-cover flex items-center"
+        className="h-screen bg-fixed bg-center bg-cover flex  items-center pl-[24rem]"
         style={{
           backgroundImage:
             'url("https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80")',
         }}
       >
-        <div className="relative max-w-7xl ml-auto px-4 sm:px-6 lg:px-8 text-grey/30 text-right">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-grey/30">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight text-shadow-lg">
             Nourish Your Body
           </h1>
@@ -34,14 +34,14 @@ const Home = () => {
             Begin your journey to better health through balanced nutrition and
             mindful eating.
           </p>
-          <button className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold flex items-center justify-end gap-2 transition-colors">
+          <button className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold flex items-center justify-center sm:justify-start gap-2 transition-colors">
             Get Started <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* Features Section */}
-      <div className="py-16 sm:py-20 bg-white">
+      <div className="py-16 sm:py-20 bg-[#f9f5f2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">

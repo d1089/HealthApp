@@ -10,16 +10,16 @@ const Navbar = () => {
   const isActive = (path: string) => {
     return location.pathname === path
       ? "text-emerald-500"
-      : "text-gray-600 hover:text-emerald-500";
+      : "text-white hover:text-emerald-500";
   };
 
   return (
-    <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed w-full bg-[#19667c] backdrop-blur-sm z-50 shadow-md">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <Apple className="h-8 w-8 text-emerald-500" />
-            <span className="text-xl font-bold text-gray-800">NutriLife</span>
+            <img src="/logo_no_name.png" alt="logo" className="w-14 h-14" />
+            <span className="text-xl font-bold text-white">NutriPal</span>
           </Link>
 
           {/* Desktop Menu */}
@@ -31,6 +31,14 @@ const Navbar = () => {
               )} font-medium transition-colors duration-200`}
             >
               Home
+            </Link>
+            <Link
+              to="/pricing"
+              className={`${isActive(
+                "/pricing"
+              )} font-medium transition-colors duration-200`}
+            >
+              Services
             </Link>
             <Link
               to="/about"
@@ -94,7 +102,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-md text-gray-600 hover:text-emerald-500 focus:outline-none"
+            className="md:hidden p-2 rounded-md text-white hover:text-emerald-500 focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
@@ -108,7 +116,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
+        <div className="md:hidden bg-[#19667c] backdrop-blur-sm border-t">
           <div className="px-4 pt-2 pb-3 space-y-1">
             <Link
               to="/"
