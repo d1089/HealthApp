@@ -156,12 +156,24 @@ const Pricing: React.FC = () => {
         <span className="text-center block text-xl">₹{value}</span>
       );
     } else if (typeof value === "string") {
-      // If the value is a string, render it inside a button
-      return (
-        <button className="px-4 py-2 bg-gray-200 text-black font-weight-30 rounded-3xl ">
-          {value}
-        </button>
-      );
+      // If the string indicates a purchase CTA, render a Get Started link.
+      const normalized = value.trim().toLowerCase();
+      if (normalized === "buy now" || normalized.includes("buy")) {
+        return (
+          <a
+            href="https://tinyurl.com/register-with-nutriipal"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-4 py-2 bg-emerald-600 text-white rounded-3xl hover:bg-emerald-700"
+            aria-label="Get Started with Nutriipal"
+          >
+            Get Started
+          </a>
+        );
+      }
+
+      // Otherwise render as plain text (counts like "3")
+      return <span className="text-center block">{value}</span>;
     }
 
     return <span className="text-gray-400">N/A</span>;
@@ -169,11 +181,11 @@ const Pricing: React.FC = () => {
 
   return (
     <div className="w-full py-16 sm:py-20 bg-white">
-      <div className="flex space-x-4 pl-4">
+      <div className="flex space-x-4 pl-4 flex-wrap gap-2">
         <button
           onClick={handleChangePlans}
           value="Basic"
-          className={`w-32 px-4 py-2 rounded transition ${
+          className={`px-4 py-2 rounded transition w-full sm:w-32 ${
             currentPlanView === "Basic"
               ? "bg-green-600 text-white hover:bg-green-700"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -184,7 +196,7 @@ const Pricing: React.FC = () => {
         <button
           onClick={handleChangePlans}
           value="Premium"
-          className={`w-32 px-4 py-2 rounded transition ${
+          className={`px-4 py-2 rounded transition w-full sm:w-32 ${
             currentPlanView === "Premium"
               ? "bg-green-600 text-white hover:bg-green-700"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -193,28 +205,40 @@ const Pricing: React.FC = () => {
           Premium
         </button>
       </div>
-      <div className="overflow-x-auto w-full p-4 flex flex-col items-center justify-center">
-        <table className="min-w-full table-auto border-collapse border border-gray-300">
+      {/* Global CTA for Pricing section */}
+      <div className="mt-4 flex justify-center">
+        <a
+          href="https://tinyurl.com/register-with-nutriipal"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-5 py-3 bg-emerald-600 text-white rounded-full shadow-sm hover:bg-emerald-700"
+          aria-label="Get Started with Nutriipal"
+        >
+          Get Started
+        </a>
+      </div>
+      <div className="overflow-x-auto scroll-x-touch w-full p-4 flex flex-col items-center justify-center">
+        <table className="w-full table-fixed border-collapse border border-gray-300">
           <thead className="bg-gray-100">
             <tr className="border-b border-gray-300">
-              <th className="px-4 py-2 text-left font-semibold border-r border-gray-300">
+              <th className="px-4 py-2 text-left font-semibold border-r border-gray-300 w-1/2 md:w-1/3 table-wrap-word">
                 {currentPlanView} Plan
               </th>
-              <th className="px-4 py-2 text-center font-semibold border-r border-gray-300">
+              <th className="px-4 py-2 text-center font-semibold border-r border-gray-300 w-1/6">
                 {currentPlanView === "Basic" ? (
                   <p>3 MONTHS - RS. 10,000</p>
                 ) : (
                   <p>3 MONTHS - RS. 15,000</p>
                 )}
               </th>
-              <th className="px-4 py-2 text-center font-semibold border-r border-gray-300">
+              <th className="px-4 py-2 text-center font-semibold border-r border-gray-300 w-1/6">
                 {currentPlanView === "Basic" ? (
                   <p>6 MONTHS - RS. 18,000</p>
                 ) : (
                   <p>6 MONTHS - RS. 28,000</p>
                 )}
               </th>
-              <th className="px-4 py-2 text-center font-semibold">
+              <th className="px-4 py-2 text-center font-semibold w-1/6">
                 {currentPlanView === "Basic" ? (
                   <p>9 MONTHS - RS. 27,000</p>
                 ) : (
@@ -229,8 +253,8 @@ const Pricing: React.FC = () => {
                 key={idx}
                 className="border-t border-b border-gray-200 hover:bg-gray-50 transition-color"
               >
-                <td className="px-4 py-3 border-r border-gray-300">
-                  {row.feature}
+                <td className="px-4 py-3 border-r border-gray-300 table-wrap-word max-w-xs">
+                  {row.feature || "\u00A0"}
                 </td>
                 <td className="py-2 text-center border-r border-gray-300">
                   {row.feature.includes("Exclusive Discounts")

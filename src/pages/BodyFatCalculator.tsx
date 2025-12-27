@@ -1,5 +1,8 @@
 import React, { useState, ChangeEvent } from "react";
-import OtherCalculators from "../components/OtherCalculators";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calculator, Info, X } from "lucide-react";
+import { openExternal } from "../utils/openExternal";
+import { URLS } from "../constants/urls";
 
 interface FormData {
   gender: "male" | "female" | "";
@@ -9,9 +12,14 @@ interface FormData {
   heightUnit: "in" | "cm";
   neck: string;
   neckUnit: "in" | "cm";
-  hip?: string; // for females
+  hip?: string;
   hipUnit?: "in" | "cm";
 }
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const toInches = (value: string, unit: "in" | "cm") => {
   const v = parseFloat(value);
@@ -55,7 +63,6 @@ export default function BodyFatCalculator() {
       hipUnit,
     } = formData;
 
-    // convert everything to INCHES for the USC equations
     const waistIn = toInches(waist, waistUnit);
     const neckIn = toInches(neck, neckUnit);
     const heightIn = toInches(height, heightUnit);
@@ -75,8 +82,6 @@ export default function BodyFatCalculator() {
     let result: number;
 
     if (gender === "male") {
-      // U.S. Navy (USC) — all values in inches
-      // BFP = 86.010*log10(waist - neck) - 70.041*log10(height) + 36.76
       const diff = waistIn - neckIn;
       if (diff <= 0) {
         setBodyFat(null);
@@ -84,8 +89,6 @@ export default function BodyFatCalculator() {
       }
       result = 86.01 * Math.log10(diff) - 70.041 * Math.log10(heightIn) + 36.76;
     } else {
-      // Female USC version: needs hip
-      // BFP = 163.205*log10(waist + hip - neck) - 97.684*log10(height) - 78.387
       if (isNaN(hipIn)) {
         setBodyFat(null);
         return;
@@ -103,211 +106,365 @@ export default function BodyFatCalculator() {
   };
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 relative">
-        <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
-          {/* Left Section */}
-          <div className="p-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">
-              Body Fat Calculator
-            </h1>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 relative overflow-hidden pt-24 pb-20">
+      {/* Fresh Vegetables Background Pattern */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-5">
+        <div className="absolute top-10 left-10 text-8xl">🥬</div>
+        <div className="absolute top-40 right-20 text-7xl">🥕</div>
+        <div className="absolute bottom-32 left-32 text-9xl">🥗</div>
+        <div className="absolute top-1/3 right-1/4 text-6xl">🥑</div>
+        <div className="absolute bottom-20 right-40 text-7xl">🍅</div>
+      </div>
 
-            <label className="block mb-4">
-              <span className="text-gray-700">Gender*</span>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+      {/* Animated gradient blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-20 z-0">
+        <motion.div
+          className="absolute -top-40 -right-40 w-80 h-80 bg-green-300 rounded-full mix-blend-multiply"
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 30, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply"
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, -40, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-blue-600 bg-clip-text text-transparent mb-4">
+            Body Fat Calculator
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mx-auto">
+            Calculate your body fat percentage using the U.S. Navy method
+          </p>
+        </motion.div>
+
+        {/* Main Calculator Card */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/50"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Left Section - Form */}
+            <div className="p-8 md:p-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Calculator className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Enter Your Measurements
+                </h2>
+              </div>
+
+              {/* Gender */}
+              <label className="block mb-6">
+                <span className="text-gray-700 font-semibold mb-2 block">
+                  Gender*
+                </span>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="text-sm text-emerald-600 hover:text-emerald-700 underline mb-6 flex items-center gap-1"
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </label>
+                <Info className="w-4 h-4" />
+                Why only two genders?
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setShowModal(true)}
-              className="text-sm text-gray-500 underline mb-6"
-            >
-              Why only two genders?
-            </button>
-
-            {/* Waist */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="col-span-2">
-                <label className="block text-gray-700">Waist*</label>
-                <input
-                  type="number"
-                  name="waist"
-                  value={formData.waist}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700">Unit</label>
-                <select
-                  name="waistUnit"
-                  value={formData.waistUnit}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-2 py-2"
-                >
-                  <option value="in">in</option>
-                  <option value="cm">cm</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Height */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="col-span-2">
-                <label className="block text-gray-700">Height*</label>
-                <input
-                  type="number"
-                  name="height"
-                  value={formData.height}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700">Unit</label>
-                <select
-                  name="heightUnit"
-                  value={formData.heightUnit}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-2 py-2"
-                >
-                  <option value="cm">cm</option>
-                  <option value="in">in</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Neck */}
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              <div className="col-span-2">
-                <label className="block text-gray-700">
-                  Neck Circumference*
-                </label>
-                <input
-                  type="number"
-                  name="neck"
-                  value={formData.neck}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700">Unit</label>
-                <select
-                  name="neckUnit"
-                  value={formData.neckUnit}
-                  onChange={handleChange}
-                  className="mt-1 w-full border rounded-lg px-2 py-2"
-                >
-                  <option value="in">in</option>
-                  <option value="cm">cm</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Hip for females */}
-            {formData.gender === "female" && (
+              {/* Waist */}
               <div className="grid grid-cols-3 gap-3 mb-6">
                 <div className="col-span-2">
-                  <label className="block text-gray-700">
-                    Hip Circumference*
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Waist*
                   </label>
                   <input
                     type="number"
-                    name="hip"
-                    value={formData.hip}
+                    name="waist"
+                    value={formData.waist}
                     onChange={handleChange}
-                    className="mt-1 w-full border rounded-lg px-3 py-2"
+                    placeholder="Enter waist"
+                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Unit</label>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Unit
+                  </label>
                   <select
-                    name="hipUnit"
-                    value={formData.hipUnit}
+                    name="waistUnit"
+                    value={formData.waistUnit}
                     onChange={handleChange}
-                    className="mt-1 w-full border rounded-lg px-2 py-2"
+                    className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
                   >
                     <option value="in">in</option>
                     <option value="cm">cm</option>
                   </select>
                 </div>
               </div>
-            )}
 
-            <button
-              onClick={calculateBodyFat}
-              className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
-            >
-              Let's calculate
-            </button>
-          </div>
+              {/* Height */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="col-span-2">
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Height*
+                  </label>
+                  <input
+                    type="number"
+                    name="height"
+                    value={formData.height}
+                    onChange={handleChange}
+                    placeholder="Enter height"
+                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Unit
+                  </label>
+                  <select
+                    name="heightUnit"
+                    value={formData.heightUnit}
+                    onChange={handleChange}
+                    className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                  >
+                    <option value="cm">cm</option>
+                    <option value="in">in</option>
+                  </select>
+                </div>
+              </div>
 
-          {/* Right Section */}
-          <div className="bg-gray-50 p-8 flex flex-col justify-center">
-            <h2 className="text-xl font-semibold mb-4">
-              Your Body fat Percentage is
-            </h2>
-            <div className="text-3xl font-bold text-gray-800 bg-white border rounded-lg py-6 text-center mb-6">
-              {bodyFat ?? "-"} {bodyFat ? "%" : ""}
+              {/* Neck */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="col-span-2">
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Neck Circumference*
+                  </label>
+                  <input
+                    type="number"
+                    name="neck"
+                    value={formData.neck}
+                    onChange={handleChange}
+                    placeholder="Enter neck"
+                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Unit
+                  </label>
+                  <select
+                    name="neckUnit"
+                    value={formData.neckUnit}
+                    onChange={handleChange}
+                    className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                  >
+                    <option value="in">in</option>
+                    <option value="cm">cm</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Hip for females */}
+              {formData.gender === "female" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="grid grid-cols-3 gap-3 mb-6"
+                >
+                  <div className="col-span-2">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Hip Circumference*
+                    </label>
+                    <input
+                      type="number"
+                      name="hip"
+                      value={formData.hip}
+                      onChange={handleChange}
+                      placeholder="Enter hip"
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Unit
+                    </label>
+                    <select
+                      name="hipUnit"
+                      value={formData.hipUnit}
+                      onChange={handleChange}
+                      className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none bg-white/50 backdrop-blur transition-all"
+                    >
+                      <option value="in">in</option>
+                      <option value="cm">cm</option>
+                    </select>
+                  </div>
+                </motion.div>
+              )}
+
+              <motion.button
+                onClick={calculateBodyFat}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Calculate Now 📊
+              </motion.button>
             </div>
-            <p className="text-gray-600 mb-6">
-              Body fat percentage is a key indicator of good health…
-            </p>
 
-            <div className="bg-white p-6 rounded-lg shadow text-center">
-              {/* <p className="font-semibold text-gray-800 mb-2">
-              Take the first step to unlocking a new you!
-            </p>
-            <p className="text-sm text-gray-600 mb-4">
-              3 million+ members trust FITTR for their fitness & nutrition needs
-            </p> */}
-              <button className="bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
-                Start Your Journey
-              </button>
+            {/* Right Section - Result */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 md:p-10 flex flex-col justify-center relative overflow-hidden">
+              {/* Floating vegetables */}
+              <div className="absolute inset-0 opacity-10 pointer-events-none">
+                <motion.div
+                  className="absolute top-10 right-10 text-6xl"
+                  animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity }}
+                >
+                  💪
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-10 left-10 text-6xl"
+                  animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity }}
+                >
+                  📏
+                </motion.div>
+              </div>
+
+              <div className="relative z-10">
+                <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
+                  Your Body Fat Percentage
+                </h2>
+                <motion.div
+                  className="bg-white/90 backdrop-blur-xl border-2 border-green-200 rounded-2xl py-10 text-center mb-6 shadow-xl"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="text-6xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                    {bodyFat ?? "-"}
+                  </div>
+                  {bodyFat && (
+                    <div className="text-3xl font-bold text-gray-600 mt-2">
+                      %
+                    </div>
+                  )}
+                </motion.div>
+
+                <p className="text-gray-700 mb-8 text-center leading-relaxed">
+                  Body fat percentage is a key indicator of good health and
+                  fitness level.
+                </p>
+
+                <div className="bg-white/90 backdrop-blur-xl p-6 rounded-2xl shadow-lg text-center border border-green-100">
+                  <p className="font-semibold text-gray-900 mb-2 text-lg">
+                    Ready to transform your health?
+                  </p>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Join our community for personalized nutrition guidance
+                  </p>
+                  <motion.button
+                    onClick={() => openExternal(URLS.GET_STARTED)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg transition-all"
+                  >
+                    Start Your Journey 🚀
+                  </motion.button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
+      </div>
 
-        {/* Modal */}
+      {/* Modal */}
+      <AnimatePresence>
         {showModal && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setShowModal(false)}
           >
-            <div
-              className="bg-white rounded-2xl shadow-lg p-8 max-w-lg text-center relative"
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg relative border-2 border-green-100"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-2xl font-bold mb-4">Why only two genders?</h2>
-              <p className="text-gray-600 mb-6">
-                This calculator uses the Navy method which has sex-specific
-                constants…
-              </p>
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                className="absolute top-4 right-4 w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
               >
-                Close
+                <X className="w-5 h-5 text-gray-600" />
               </button>
-            </div>
-          </div>
+
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Info className="w-8 h-8 text-white" />
+              </div>
+
+              <h2 className="text-2xl font-bold mb-4 text-center text-gray-900">
+                Why only two genders?
+              </h2>
+              <p className="text-gray-600 mb-6 leading-relaxed text-center">
+                This calculator uses the U.S. Navy method which has sex-specific
+                constants based on biological differences in body composition.
+                The formula was developed using binary sex categories for
+                physiological measurements.
+              </p>
+              <motion.button
+                onClick={() => setShowModal(false)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all"
+              >
+                Got it, thanks!
+              </motion.button>
+            </motion.div>
+          </motion.div>
         )}
-      </div>
-      <div className=" bg-gray-50 flex items-center justify-center px-6 relative">
-        <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl grid grid-cols-1 overflow-hidden">
-          <OtherCalculators />
-        </div>
-      </div>
-    </>
+      </AnimatePresence>
+    </div>
   );
 }

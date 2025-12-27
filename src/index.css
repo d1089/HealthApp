@@ -17,3 +17,73 @@ body {
 .text-shadow-md {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 } */
+
+@media (max-width: 640px) {
+  /* avoid background-attachment: fixed on small devices for performance/visual issues */
+  .bg-fixed {
+    background-attachment: scroll !important;
+  }
+}
+
+/* add safe-area top padding helper for notch devices */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Prevent horizontal overflow on small devices */
+html,
+body,
+#root {
+  overflow-x: hidden;
+}
+
+/* Smooth horizontal scrolling for overflow containers on iOS */
+.scroll-x-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure long words in tables wrap instead of forcing width */
+.table-wrap-word {
+  word-break: break-word;
+  white-space: normal;
+}
+
+.text-azure {
+  --tw-text-opacity: 1;
+  color: #19667c /* #ffffff */;
+}
+
+/* for desktop */
+.whatsapp_float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #25d366;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 100;
+}
+
+.whatsapp-icon {
+  margin-top: 16px;
+}
+
+/* for mobile */
+@media screen and (max-width: 767px) {
+  .whatsapp-icon {
+    margin-top: 10px;
+  }
+
+  .whatsapp_float {
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 10px;
+    font-size: 22px;
+  }
+}
