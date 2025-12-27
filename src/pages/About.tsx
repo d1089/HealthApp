@@ -224,16 +224,15 @@ const AboutUsPage = () => {
                   className="absolute inset-0 flex items-center justify-center p-8"
                 >
                   {/* Placeholder for founder image */}
-                  <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-2xl border-8 border-white/50">
+                  {/* <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-2xl border-8 border-white/50">
                     <span className="text-8xl md:text-9xl">👩‍⚕️</span>
-                  </div>
-                  {/* Replace above div with actual image:
-                  <img 
-                    src="/path-to-founder-image.jpg" 
-                    alt="Founder Name"
+                  </div> */}
+                  {/* Replace above div with actual image: */}
+                  <img
+                    src="/assets/founder.jpg"
+                    alt="Palak M. Acharya"
                     className="w-full h-full object-cover rounded-full shadow-2xl border-8 border-white/50"
                   />
-                  */}
                 </motion.div>
 
                 {/* Decorative elements */}
