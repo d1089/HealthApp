@@ -1,6 +1,8 @@
 import React from "react";
-import { Award, Utensils, Clock } from "lucide-react";
+import { Award, Utensils, Clock, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { openExternal } from "../utils/openExternal";
+import { URLS } from "../constants/urls";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -157,16 +159,23 @@ const AboutUsPage = () => {
                   Our Mission
                 </h2>
                 <p className="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed">
-                  Nutrition isn't about restriction — it's about building a{" "}
+                  At NutriiPal, we walk beside you on a{" "}
                   <span className="font-semibold bg-green-100 px-2 py-1 rounded text-green-800">
-                    sustainable relationship with food
+                    science-led journey to wellness.
                   </span>{" "}
-                  that supports long-term health and confidence.
+                  We are dedicated to making the dream of
+                  <span className="font-semibold bg-green-100 px-2 py-1 rounded text-green-800">
+                    holistic health accessible
+                  </span>{" "}
+                  to our users, replacing the burden of illness with the
+                  <span className="font-semibold bg-green-100 px-2 py-1 rounded text-green-800">
+                    simple, profound joy of feeling healthy again.
+                  </span>
                 </p>
-                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                {/* <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
                   Our certified nutritionists and dietitians provide
                   personalized, practical guidance designed to fit real lives.
-                </p>
+                </p> */}
               </motion.div>
 
               {/* FEATURE LIST */}
@@ -177,27 +186,56 @@ const AboutUsPage = () => {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                {[
-                  {
-                    icon: <Award />,
-                    title: "Expert Guidance",
-                    desc: "Certified professionals with real-world clinical experience.",
-                  },
-                  {
-                    icon: <Utensils />,
-                    title: "Personalized Nutrition",
-                    desc: "Meal plans aligned to your lifestyle and health goals.",
-                  },
-                  {
-                    icon: <Clock />,
-                    title: "Sustainable Habits",
-                    desc: "Programs designed for consistency, not burnout.",
-                  },
-                ].map((item) => (
-                  <motion.div key={item.title} variants={fadeUp}>
-                    <Feature {...item} />
-                  </motion.div>
-                ))}
+                {/* Core Values Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    {
+                      icon: <Award className="w-6 h-6" />,
+                      title: "Science-Backed",
+                      desc: "Clinical data, not fad diets",
+                      color: "from-blue-100 to-blue-300 via-emerald-200",
+                    },
+                    {
+                      icon: <Utensils className="w-6 h-6" />,
+                      title: "Accessible Care",
+                      desc: "Quality without luxury prices",
+                      color: "from-blue-100 to-blue-300 via-emerald-200",
+                    },
+                    {
+                      icon: <Clock className="w-6 h-6" />,
+                      title: "Holistic Approach",
+                      desc: "Sleep, stress, and nutrition",
+                      color: "from-blue-100 to-blue-300 via-emerald-200",
+                    },
+                    {
+                      icon: <Heart className="w-6 h-6" />,
+                      title: "Kitchen Ally",
+                      desc: "Your partner in wellness",
+                      color: "from-blue-100 to-blue-300 via-emerald-200",
+                    },
+                  ].map((item, index) => (
+                    <motion.div
+                      key={item.title}
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                    >
+                      <div
+                        className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center mb-3 text-white group-hover:scale-110 transition-transform`}
+                      >
+                        {item.icon}
+                      </div>
+                      <h4 className="font-bold text-gray-900 mb-1">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm text-gray-600">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -375,6 +413,7 @@ const AboutUsPage = () => {
             </p>
 
             <motion.button
+              onClick={() => openExternal(URLS.GET_STARTED)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 rounded-full bg-white text-green-600 hover:bg-gray-50 transition font-bold text-lg shadow-lg hover:shadow-xl relative z-10"
