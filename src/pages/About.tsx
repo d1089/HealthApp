@@ -312,7 +312,8 @@ const AboutUsPage = () => {
                   </h2>
 
                   <p className="text-lg text-emerald-600 font-semibold mb-6">
-                    Founder & Chief Nutritionist
+                    Founder & Chief Nutritionist <br />
+                    (Msc., Bsc., PGD. Nutrition)
                   </p>
 
                   <div className="space-y-4 text-gray-700 leading-relaxed">
