@@ -9,6 +9,8 @@ import BMRCalculator from "./pages/BMRCalculator";
 import OneRmCalculator from "./pages/OneRMCalculator";
 import Pricing from "./components/Pricing";
 import MealPlanner from "./pages/MealPlanner";
+import ScrollToTop from "./components/ScrollToTop";
+import BlogPage from "./pages/BlogPage";
 // import AboutUsPage from "./pages/AboutUsPage";
 // import MacronutrientCalculator from "./pages/MacronutrientCalculator";
 // import NutritionPlanner from "./pages/NutritionPlanner";
@@ -17,6 +19,7 @@ import MealPlanner from "./pages/MealPlanner";
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <Routes>
@@ -24,6 +27,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/blogs" element={<BlogPage />} />
           <Route
             path="/tools/body-fat-calculator"
             element={<BodyFatCalculator />}

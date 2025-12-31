@@ -74,6 +74,14 @@ const Navbar = () => {
             >
               About
             </Link>
+            <Link
+              to={"/blogs"}
+              className={`${isActive(
+                "blogs"
+              )} px-4 py-2 rounded-xl font-medium transition-all duration-200 hover:bg-green-50`}
+            >
+              Blogs
+            </Link>
 
             {/* Desktop Tools Dropdown */}
             <div
@@ -211,6 +219,16 @@ const Navbar = () => {
                 )} w-full text-left block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 hover:bg-green-50`}
               >
                 ℹ️ About
+              </Link>
+
+              <Link
+                to={"/blogs"}
+                onClick={() => handleLinkClick("blogs")}
+                className={`${isActive(
+                  "blogs"
+                )} w-full text-left block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 hover:bg-green-50`}
+              >
+                📝 Blogs
               </Link>
 
               {/* Mobile Tools Accordion */}

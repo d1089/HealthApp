@@ -20,7 +20,7 @@ const ReviewCarouselComponent = () => {
     id: number;
     name: string;
     age: number;
-    role: string;
+    // role: string;
     rating: number;
     comment: string;
     // image: string;
@@ -38,10 +38,10 @@ const ReviewCarouselComponent = () => {
       id: 1,
       name: "Namrata Thakar",
       age: 39,
-      role: "IT Professional, Mumbai",
+      // role: "IT Professional, Mumbai",
       rating: 5,
       comment:
-        "I was on 3 medications for my diabetes. After 6 months with NutriiPal, I'm completely medicine-free! My HbA1c dropped from 8.5 to 5.8.",
+        "I have Type 1 diabetes (MODY) following GDM. Earlier, I struggled with nighttime hypoglycemia and low energy due to poor diet–insulin balance. With Palak’s guidance, my insulin dose reduced, my energy levels improved, and my blood sugars became more stable. I was earlier on three diabetes medications, and after 6 months with NutriiPal, I’m completely medicine-free. My HbA1c dropped from 10.5 to 7.8, and I no longer experience frequent hypos.",
       // image:
       //   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80",
       beforeAfter: {
@@ -50,21 +50,21 @@ const ReviewCarouselComponent = () => {
         medications: { before: "3 drugs", after: "0 drugs" },
       },
       timeframe: "3 months",
-      achievement: "Medicine-Free",
+      achievement: "Low Insulin & Medicine-Free",
     },
     {
       id: 2,
       name: "Anshul Chandwani",
       age: 38,
-      role: "Teacher, Mumbai",
+      // role: "Teacher, Mumbai",
       rating: 5,
       comment:
-        "NutriiPal taught me how to eat my favorite dal-rice without spiking my sugar. Cured from grade 3 fatty lever and lost 15kg with stopping all diabetes medications!",
+        "I’ve lost 10 kg, no longer need medications, my cholesterol levels have improved, and my fatty liver has reversed.",
       // image:
       //   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80",
       beforeAfter: {
         hba1c: { before: "13.6%", after: "6.4%" },
-        weight: { before: "78kg", after: "63kg" },
+        weight: { before: "78kg", after: "68kg" },
         medications: { before: "3 drugs", after: "0 drugs" },
       },
       timeframe: "3 months",
@@ -74,10 +74,10 @@ const ReviewCarouselComponent = () => {
       id: 3,
       name: "Ketan Parsiya",
       age: 35,
-      role: "Business Owner, Ahmedabad",
+      // role: "Business Owner, Ahmedabad",
       rating: 5,
       comment:
-        "From taking insulin daily to zero medications in 8 months. The holistic approach actually works! My energy levels are amazing now.",
+        "I adopted a healthy, balanced plate routine and transitioned from long-standing habits to more sustainable ones. I now feel energetic and healthier overall. My medication reduced from 3–4 tablets a day to just one. Within three months, my HbA1c improved from 9 to 6.5, and my triglycerides dropped significantly from 346 to 103.4.",
       // image:
       //   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80",
       beforeAfter: {
@@ -86,16 +86,16 @@ const ReviewCarouselComponent = () => {
         medications: { before: "Insulin", after: "0 drugs" },
       },
       timeframe: "3 months",
-      achievement: "Insulin-Free",
+      achievement: "Medication Reduced",
     },
     {
       id: 4,
       name: "Bhavesh",
       age: 36,
-      role: "Mumbai",
+      // role: "Mumbai",
       rating: 5,
       comment:
-        "From taking insulin daily to zero medications in 3 months. The holistic approach actually works! My energy levels are amazing now.",
+        "I was diagnosed with Diabetes just a few months back, got so worried about my health and changed my routine, fixed my sleep, added more protein and reversed diabetes in 4 months with help of my dear nutritionist Palak. Thanks a lot.",
       // image:
       //   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80",
       beforeAfter: {
@@ -295,7 +295,7 @@ const ReviewCarouselComponent = () => {
                     <h3 className="font-bold text-xl text-gray-900">
                       {review.name}
                     </h3>
-                    <p className="text-sm text-emerald-600">{review.role}</p>
+                    {/* <p className="text-sm text-emerald-600">{review.role}</p> */}
                   </div>
                 </div>
                 <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">

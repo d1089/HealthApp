@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ReviewCarousel from "../components/ReviewCarousel";
 import { openExternal } from "../utils/openExternal";
 import { URLS } from "../constants/urls";
+import ResultStats from "../components/ResultStats";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -154,7 +155,7 @@ const Home = () => {
                 }}
               />
 
-              <motion.div
+              {/* <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
@@ -163,7 +164,7 @@ const Home = () => {
                 <p className="text-red-700 font-bold text-sm sm:text-base">
                   ⚠️ 136 Million Indians in Prediabetic Stage - Act Now!
                 </p>
-              </motion.div>
+              </motion.div> */}
 
               <motion.h1
                 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-blue-600 bg-clip-text text-transparent mb-6 leading-tight relative"
@@ -207,6 +208,7 @@ const Home = () => {
         </section>
 
         {/* Crisis Statistics Section */}
+
         <section className="py-20 sm:py-28 bg-white/70 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -217,12 +219,12 @@ const Home = () => {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent mb-6">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-600 to-yellow-900 bg-clip-text text-transparent mb-6">
                 The Diabetes Crisis in India
               </h2>
               <p className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 We don't just manage the numbers; we help you{" "}
-                <span className="font-bold text-green-600">
+                <span className="text-3xl font-bold text-green-600">
                   exit the statistics
                 </span>
               </p>
@@ -234,21 +236,21 @@ const Home = () => {
                   number: "101M+",
                   label: "Indians Living with Diabetes",
                   sublabel: "44% increase in just 4 years",
-                  color: "from-red-500 to-red-600",
-                  emoji: "🚨",
+                  color: "from-yellow-500 to-yellow-800",
+                  emoji: "💊",
                 },
                 {
                   number: "136M",
                   label: "Indians in Prediabetic Stage",
                   sublabel: "15.3% of population at risk",
-                  color: "from-orange-500 to-orange-600",
+                  color: "from-yellow-500 to-yellow-800",
                   emoji: "⚠️",
                 },
                 {
                   number: "1 in 4",
                   label: "Global Diabetes Cases from India",
                   sublabel: "25% of worldwide cases",
-                  color: "from-yellow-500 to-yellow-600",
+                  color: "from-yellow-500 to-yellow-700",
                   emoji: "🌍",
                 },
               ].map((stat, index) => (
@@ -278,7 +280,7 @@ const Home = () => {
             </div>
 
             {/* Key Facts */}
-            <motion.div
+            {/* <motion.div
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
@@ -310,7 +312,7 @@ const Home = () => {
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
+            </motion.div> */}
           </div>
         </section>
 
@@ -327,7 +329,7 @@ const Home = () => {
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">
                 Why Choose NutriiPal?
               </h2>
-              <p className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl font-extrabold sm:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 Get the life you deserve back
               </p>
             </motion.div>
@@ -463,7 +465,7 @@ const Home = () => {
             <ReviewCarousel />
 
             {/* Results Stats */}
-            <motion.div
+            {/* <motion.div
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
@@ -491,7 +493,8 @@ const Home = () => {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.div> */}
+            <ResultStats />
           </div>
         </section>
 
