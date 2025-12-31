@@ -465,38 +465,38 @@ const blogPosts: BlogPost[] = [
       </ul>
     `,
   },
-  {
-    id: 2,
-    title: "5 Indian Superfoods That Help Reverse Diabetes Naturally",
-    excerpt:
-      "Discover traditional Indian ingredients backed by modern science that can help stabilize blood sugar.",
-    image:
-      "https://images.unsplash.com/photo-1596040033229-a0b44d1d0633?auto=format&fit=crop&w=800&q=80",
-    date: "Dec 25, 2024",
-    readTime: "6 min read",
-    category: "Nutrition",
-    platform: "substack",
-    author: "Priya Sharma",
-    content: `
-      <h2>Harnessing the Power of Indian Superfoods</h2>
-      <p>India has a rich tradition of using food as medicine. These five superfoods have been used for centuries and are now backed by modern scientific research.</p>
-      
-      <h3>1. Bitter Gourd (Karela)</h3>
-      <p>Bitter gourd contains compounds that act similarly to insulin, helping lower blood sugar levels. Studies show it can reduce fasting blood glucose by up to 25%.</p>
-      
-      <h3>2. Fenugreek Seeds (Methi)</h3>
-      <p>Rich in soluble fiber, fenugreek seeds slow down digestion and absorption of carbohydrates, leading to better blood sugar control.</p>
-      
-      <h3>3. Turmeric (Haldi)</h3>
-      <p>Curcumin in turmeric has powerful anti-inflammatory properties and can improve insulin sensitivity.</p>
-      
-      <h3>4. Amla (Indian Gooseberry)</h3>
-      <p>High in Vitamin C and chromium, amla helps regulate carbohydrate metabolism and has been shown to lower blood sugar levels.</p>
-      
-      <h3>5. Cinnamon (Dalchini)</h3>
-      <p>Just half a teaspoon daily can improve insulin sensitivity and lower blood sugar levels by up to 29%.</p>
-    `,
-  },
+  //   {
+  //     id: 2,
+  //     title: "5 Indian Superfoods That Help Reverse Diabetes Naturally",
+  //     excerpt:
+  //       "Discover traditional Indian ingredients backed by modern science that can help stabilize blood sugar.",
+  //     image:
+  //       "https://images.unsplash.com/photo-1596040033229-a0b44d1d0633?auto=format&fit=crop&w=800&q=80",
+  //     date: "Dec 25, 2024",
+  //     readTime: "6 min read",
+  //     category: "Nutrition",
+  //     platform: "substack",
+  //     author: "Priya Sharma",
+  //     content: `
+  //       <h2>Harnessing the Power of Indian Superfoods</h2>
+  //       <p>India has a rich tradition of using food as medicine. These five superfoods have been used for centuries and are now backed by modern scientific research.</p>
+
+  //       <h3>1. Bitter Gourd (Karela)</h3>
+  //       <p>Bitter gourd contains compounds that act similarly to insulin, helping lower blood sugar levels. Studies show it can reduce fasting blood glucose by up to 25%.</p>
+
+  //       <h3>2. Fenugreek Seeds (Methi)</h3>
+  //       <p>Rich in soluble fiber, fenugreek seeds slow down digestion and absorption of carbohydrates, leading to better blood sugar control.</p>
+
+  //       <h3>3. Turmeric (Haldi)</h3>
+  //       <p>Curcumin in turmeric has powerful anti-inflammatory properties and can improve insulin sensitivity.</p>
+
+  //       <h3>4. Amla (Indian Gooseberry)</h3>
+  //       <p>High in Vitamin C and chromium, amla helps regulate carbohydrate metabolism and has been shown to lower blood sugar levels.</p>
+
+  //       <h3>5. Cinnamon (Dalchini)</h3>
+  //       <p>Just half a teaspoon daily can improve insulin sensitivity and lower blood sugar levels by up to 29%.</p>
+  //     `,
+  //   },
   {
     id: 3,
     title: "The Truth About Carbs: Why Dal-Rice Can Be Diabetes-Friendly",
