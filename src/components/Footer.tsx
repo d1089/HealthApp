@@ -116,7 +116,7 @@ const Footer = () => {
             </h4>
             <div className="flex gap-4">
               <motion.a
-                href="#"
+                href="https://www.facebook.com/people/Palak-Acharya/61558055922441"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2, rotate: 5 }}
