@@ -254,7 +254,8 @@ const BlogPage: React.FC = () => {
                         className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
                         title="Read on LinkedIn"
                       >
-                        <i className="fa fa-linkedin"></i>
+                        <i className="fa-brands fa-linkedin"></i>
+                        {/* <i class="fa-brands fa-medium-m"></i> */}
                       </button>
                     </div>
                   </div>
@@ -309,7 +310,7 @@ const BlogPage: React.FC = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
             >
-              <span className="text-xl sm:text-2xl">📝</span>
+              <i className="fa-brands fa-medium-m"></i>
               <span className="font-semibold text-gray-700 text-sm sm:text-base">
                 Medium
               </span>
@@ -320,7 +321,12 @@ const BlogPage: React.FC = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
             >
-              <span className="text-xl sm:text-2xl">✉️</span>
+              <img
+                src="https://cdn.simpleicons.org/substack/FF6719"
+                alt="Substack"
+                width="20"
+                height="20"
+              ></img>
               <span className="font-semibold text-gray-700 text-sm sm:text-base">
                 Substack
               </span>
