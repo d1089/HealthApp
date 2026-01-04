@@ -1,419 +1,11 @@
-// import React, { useState } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import {
-//   BookOpen,
-//   Calendar,
-//   Clock,
-//   ArrowRight,
-//   ExternalLink,
-//   Search,
-//   Tag,
-// } from "lucide-react";
-
-// interface BlogPost {
-//   id: number;
-//   title: string;
-//   excerpt: string;
-//   image: string;
-//   date: string;
-//   readTime: string;
-//   category: string;
-//   platform: "medium" | "substack";
-//   url: string;
-//   author: string;
-// }
-
-// const blogPosts: BlogPost[] = [
-//   {
-//     id: 1,
-//     title: "Understanding Diabetes: A Complete Guide to Blood Sugar Management",
-//     excerpt:
-//       "Learn the fundamentals of diabetes management, from understanding HbA1c levels to making sustainable dietary changes that support long-term health.",
-//     image:
-//       "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 28, 2024",
-//     readTime: "8 min read",
-//     category: "Diabetes",
-//     platform: "medium",
-//     url: "https://medium.com/@nutriipal/diabetes-guide",
-//     author: "Dr. Sarah Johnson",
-//   },
-//   {
-//     id: 2,
-//     title: "5 Indian Superfoods That Help Reverse Diabetes Naturally",
-//     excerpt:
-//       "Discover traditional Indian ingredients backed by modern science that can help stabilize blood sugar and support your diabetes reversal journey.",
-//     image:
-//       "https://images.unsplash.com/photo-1596040033229-a0b44d1d0633?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 25, 2024",
-//     readTime: "6 min read",
-//     category: "Nutrition",
-//     platform: "substack",
-//     url: "https://nutriipal.substack.com/superfoods",
-//     author: "Priya Sharma",
-//   },
-//   {
-//     id: 3,
-//     title: "The Truth About Carbs: Why Dal-Rice Can Be Diabetes-Friendly",
-//     excerpt:
-//       "Breaking myths about carbohydrates and teaching you how to enjoy traditional meals while managing blood sugar effectively.",
-//     image:
-//       "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 22, 2024",
-//     readTime: "7 min read",
-//     category: "Nutrition",
-//     platform: "medium",
-//     url: "https://medium.com/@nutriipal/carbs-truth",
-//     author: "Rajesh Kumar",
-//   },
-//   {
-//     id: 4,
-//     title: "Medicine-Free Living: Success Stories from Our Community",
-//     excerpt:
-//       "Real stories of individuals who reversed their diabetes and achieved medication-free lives through our holistic nutrition program.",
-//     image:
-//       "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 20, 2024",
-//     readTime: "10 min read",
-//     category: "Success Stories",
-//     platform: "substack",
-//     url: "https://nutriipal.substack.com/success-stories",
-//     author: "NutriiPal Team",
-//   },
-//   {
-//     id: 5,
-//     title: "Sleep & Stress: The Hidden Factors Affecting Your Blood Sugar",
-//     excerpt:
-//       "Understanding the crucial connection between sleep quality, stress management, and diabetes control beyond just diet and exercise.",
-//     image:
-//       "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 18, 2024",
-//     readTime: "9 min read",
-//     category: "Lifestyle",
-//     platform: "medium",
-//     url: "https://medium.com/@nutriipal/sleep-stress",
-//     author: "Dr. Amit Patel",
-//   },
-//   {
-//     id: 6,
-//     title: "How to Read Food Labels: A Diabetic's Essential Guide",
-//     excerpt:
-//       "Master the art of reading nutrition labels to make informed choices at the grocery store and avoid hidden sugars.",
-//     image:
-//       "https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&w=800&q=80",
-//     date: "Dec 15, 2024",
-//     readTime: "5 min read",
-//     category: "Education",
-//     platform: "substack",
-//     url: "https://nutriipal.substack.com/food-labels",
-//     author: "Meera Reddy",
-//   },
-// ];
-
-// const categories = [
-//   "All",
-//   "Diabetes",
-//   "Nutrition",
-//   "Success Stories",
-//   "Lifestyle",
-//   "Education",
-// ];
-
-// const fadeUp = {
-//   hidden: { opacity: 0, y: 40 },
-//   visible: { opacity: 1, y: 0 },
-// };
-
-// const staggerContainer = {
-//   hidden: { opacity: 0 },
-//   visible: {
-//     opacity: 1,
-//     transition: {
-//       staggerChildren: 0.15,
-//     },
-//   },
-// };
-
-// const BlogPage = () => {
-//   const [selectedCategory, setSelectedCategory] = useState("All");
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   const filteredPosts = blogPosts.filter((post) => {
-//     const matchesCategory =
-//       selectedCategory === "All" || post.category === selectedCategory;
-//     const matchesSearch =
-//       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-//     return matchesCategory && matchesSearch;
-//   });
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 relative overflow-hidden pt-24 pb-20">
-//       {/* Fresh Vegetables Background Pattern */}
-//       <div className="fixed inset-0 pointer-events-none z-0 opacity-5">
-//         <div className="absolute top-10 left-10 text-8xl">🥬</div>
-//         <div className="absolute top-40 right-20 text-7xl">🥕</div>
-//         <div className="absolute bottom-32 left-32 text-9xl">🥗</div>
-//         <div className="absolute top-1/3 right-1/4 text-6xl">🥑</div>
-//         <div className="absolute bottom-20 right-40 text-7xl">🍅</div>
-//         <div className="absolute top-2/3 left-20 text-8xl">📚</div>
-//       </div>
-
-//       {/* Animated gradient blobs */}
-//       <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-20 z-0">
-//         <motion.div
-//           className="absolute -top-40 -right-40 w-80 h-80 bg-green-300 rounded-full mix-blend-multiply"
-//           animate={{
-//             scale: [1, 1.2, 1],
-//             x: [0, 30, 0],
-//             y: [0, -50, 0],
-//           }}
-//           transition={{
-//             duration: 8,
-//             repeat: Infinity,
-//             ease: "easeInOut",
-//           }}
-//         />
-//         <motion.div
-//           className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply"
-//           animate={{
-//             scale: [1, 1.1, 1],
-//             x: [0, -40, 0],
-//             y: [0, 30, 0],
-//           }}
-//           transition={{
-//             duration: 10,
-//             repeat: Infinity,
-//             ease: "easeInOut",
-//             delay: 2,
-//           }}
-//         />
-//       </div>
-
-//       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         {/* Header */}
-//         <motion.div
-//           variants={fadeUp}
-//           initial="hidden"
-//           animate="visible"
-//           transition={{ duration: 0.8 }}
-//           className="text-center mb-16"
-//         >
-//           <div className="flex justify-center mb-6">
-//             <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-green-500 rounded-3xl flex items-center justify-center shadow-2xl">
-//               <BookOpen className="w-10 h-10 text-white" />
-//             </div>
-//           </div>
-//           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-blue-600 bg-clip-text text-transparent mb-4">
-//             NutriiPal Blog
-//           </h1>
-//           <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-//             Expert insights on diabetes reversal, nutrition science, and healthy
-//             living
-//           </p>
-//         </motion.div>
-
-//         {/* Search and Filter Section */}
-//         <motion.div
-//           variants={fadeUp}
-//           initial="hidden"
-//           animate="visible"
-//           transition={{ duration: 0.8, delay: 0.2 }}
-//           className="mb-12"
-//         >
-//           {/* Search Bar */}
-//           <div className="max-w-2xl mx-auto mb-8">
-//             <div className="relative">
-//               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-//               <input
-//                 type="text"
-//                 placeholder="Search articles..."
-//                 value={searchQuery}
-//                 onChange={(e) => setSearchQuery(e.target.value)}
-//                 className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none text-lg bg-white/80 backdrop-blur transition-all"
-//               />
-//             </div>
-//           </div>
-
-//           {/* Category Filter */}
-//           <div className="flex flex-wrap justify-center gap-3">
-//             {categories.map((category) => (
-//               <motion.button
-//                 key={category}
-//                 onClick={() => setSelectedCategory(category)}
-//                 whileHover={{ scale: 1.05 }}
-//                 whileTap={{ scale: 0.95 }}
-//                 className={`px-6 py-2 rounded-full font-semibold transition-all ${
-//                   selectedCategory === category
-//                     ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
-//                     : "bg-white/80 text-gray-700 hover:bg-white border border-gray-200"
-//                 }`}
-//               >
-//                 {category}
-//               </motion.button>
-//             ))}
-//           </div>
-//         </motion.div>
-
-//         {/* Blog Posts Grid */}
-//         <AnimatePresence mode="wait">
-//           <motion.div
-//             key={selectedCategory + searchQuery}
-//             variants={staggerContainer}
-//             initial="hidden"
-//             animate="visible"
-//             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-//           >
-//             {filteredPosts.map((post, index) => (
-//               <motion.article
-//                 key={post.id}
-//                 variants={fadeUp}
-//                 whileHover={{ y: -10, scale: 1.02 }}
-//                 className="bg-white/90 backdrop-blur-xl rounded-3xl overflow-hidden shadow-xl border border-green-100 hover:border-green-300 transition-all group"
-//               >
-//                 {/* Image */}
-//                 <div className="relative overflow-hidden h-48">
-//                   <img
-//                     src={post.image}
-//                     alt={post.title}
-//                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-//                   />
-//                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-gray-700">
-//                     {post.platform === "medium" ? "📝 Medium" : "✉️ Substack"}
-//                   </div>
-//                   <div className="absolute top-4 left-4">
-//                     <span className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-//                       {post.category}
-//                     </span>
-//                   </div>
-//                 </div>
-
-//                 {/* Content */}
-//                 <div className="p-6">
-//                   {/* Meta Info */}
-//                   <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-//                     <div className="flex items-center gap-1">
-//                       <Calendar className="w-4 h-4" />
-//                       <span>{post.date}</span>
-//                     </div>
-//                     <div className="flex items-center gap-1">
-//                       <Clock className="w-4 h-4" />
-//                       <span>{post.readTime}</span>
-//                     </div>
-//                   </div>
-
-//                   {/* Title */}
-//                   <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-emerald-600 transition-colors">
-//                     {post.title}
-//                   </h2>
-
-//                   {/* Excerpt */}
-//                   <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
-//                     {post.excerpt}
-//                   </p>
-
-//                   {/* Author */}
-//                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-//                     <span className="text-sm text-gray-600">
-//                       By{" "}
-//                       <span className="font-semibold text-emerald-600">
-//                         {post.author}
-//                       </span>
-//                     </span>
-//                     <motion.a
-//                       href={post.url}
-//                       target="_blank"
-//                       rel="noopener noreferrer"
-//                       whileHover={{ scale: 1.1 }}
-//                       whileTap={{ scale: 0.9 }}
-//                       className="flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
-//                     >
-//                       Read More
-//                       <ExternalLink className="w-4 h-4" />
-//                     </motion.a>
-//                   </div>
-//                 </div>
-//               </motion.article>
-//             ))}
-//           </motion.div>
-//         </AnimatePresence>
-
-//         {/* No Results */}
-//         {filteredPosts.length === 0 && (
-//           <motion.div
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: 1 }}
-//             className="text-center py-20"
-//           >
-//             <div className="text-6xl mb-4">📭</div>
-//             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-//               No articles found
-//             </h3>
-//             <p className="text-gray-600">
-//               Try adjusting your search or filter criteria
-//             </p>
-//           </motion.div>
-//         )}
-
-//         {/* Newsletter CTA */}
-//         <motion.div
-//           variants={fadeUp}
-//           initial="hidden"
-//           whileInView="visible"
-//           viewport={{ once: true }}
-//           className="mt-20 bg-gradient-to-br from-emerald-500 via-green-500 to-green-600 rounded-3xl p-8 md:p-12 text-white text-center relative overflow-hidden"
-//         >
-//           <div className="absolute inset-0 opacity-10 pointer-events-none">
-//             <motion.div
-//               className="absolute top-10 left-10 text-6xl"
-//               animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-//               transition={{ duration: 5, repeat: Infinity }}
-//             >
-//               📚
-//             </motion.div>
-//             <motion.div
-//               className="absolute bottom-10 right-10 text-6xl"
-//               animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
-//               transition={{ duration: 6, repeat: Infinity }}
-//             >
-//               ✍️
-//             </motion.div>
-//           </div>
-
-//           <div className="relative z-10">
-//             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-//               Never Miss an Update
-//             </h2>
-//             <p className="text-lg md:text-xl mb-8 opacity-95 max-w-2xl mx-auto">
-//               Subscribe to get our latest articles on diabetes reversal and
-//               nutrition delivered to your inbox
-//             </p>
-//             <motion.button
-//               whileHover={{ scale: 1.05 }}
-//               whileTap={{ scale: 0.95 }}
-//               className="bg-white text-green-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-//             >
-//               Subscribe to Newsletter 📧
-//             </motion.button>
-//           </div>
-//         </motion.div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default BlogPage;
-
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
   Calendar,
   Clock,
-  X,
   Search,
-  ChevronRight,
-  ChevronLeft,
+  ExternalLink,
+  ArrowRight,
 } from "lucide-react";
 
 interface BlogPost {
@@ -424,517 +16,102 @@ interface BlogPost {
   date: string;
   readTime: string;
   category: string;
-  platform: "medium" | "substack";
   author: string;
-  content: string; // Full content for modal view
+  medium_url: string;
+  substack_url: string;
+  linkedin_url?: string;
 }
 
 const blogPosts: BlogPost[] = [
   {
     id: 1,
-    title: "Understanding Diabetes: A Complete Guide to Blood Sugar Management",
+    title: "Why Health Matters More Than Anything",
     excerpt:
-      "Learn the fundamentals of diabetes management, from understanding HbA1c levels to making sustainable dietary changes.",
+      "Hey ! you must have heard this saying “Health is wealth” although it sounds very clich'e — but this saying holds a lot of truth as I have experienced it myself that unless you are not healthy — nothing matters. The body is a magnificient machine that would",
     image:
-      "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80",
-    date: "Dec 28, 2024",
+      "https://images.unsplash.com/photo-1765795019773-3330d68f238a?auto=format&fit=crop&w=800&q=80",
+    date: "Jan 4, 2026",
     readTime: "8 min read",
-    category: "Diabetes",
-    platform: "medium",
-    author: "Dr. Sarah Johnson",
-    content: `
-      <h2>What is Diabetes?</h2>
-      <p>Diabetes is a chronic condition that affects how your body processes blood sugar (glucose). Understanding the basics is the first step toward effective management.</p>
-      
-      <h3>Types of Diabetes</h3>
-      <p>There are three main types of diabetes: Type 1, Type 2, and Gestational diabetes. Type 2 diabetes is the most common, accounting for about 90% of all diabetes cases.</p>
-      
-      <h3>Understanding HbA1c</h3>
-      <p>HbA1c is a crucial marker that shows your average blood sugar levels over the past 2-3 months. A level below 5.7% is considered normal, while 5.7-6.4% indicates prediabetes, and 6.5% or higher suggests diabetes.</p>
-      
-      <h3>Dietary Management</h3>
-      <p>The key to managing diabetes through diet is understanding how different foods affect your blood sugar. Complex carbohydrates, lean proteins, and healthy fats should form the foundation of your meals.</p>
-      
-      <h3>Key Takeaways</h3>
-      <ul>
-        <li>Monitor your blood sugar regularly</li>
-        <li>Focus on whole, unprocessed foods</li>
-        <li>Stay physically active</li>
-        <li>Work with healthcare professionals</li>
-        <li>Make sustainable lifestyle changes</li>
-      </ul>
-    `,
-  },
-  //   {
-  //     id: 2,
-  //     title: "5 Indian Superfoods That Help Reverse Diabetes Naturally",
-  //     excerpt:
-  //       "Discover traditional Indian ingredients backed by modern science that can help stabilize blood sugar.",
-  //     image:
-  //       "https://images.unsplash.com/photo-1596040033229-a0b44d1d0633?auto=format&fit=crop&w=800&q=80",
-  //     date: "Dec 25, 2024",
-  //     readTime: "6 min read",
-  //     category: "Nutrition",
-  //     platform: "substack",
-  //     author: "Priya Sharma",
-  //     content: `
-  //       <h2>Harnessing the Power of Indian Superfoods</h2>
-  //       <p>India has a rich tradition of using food as medicine. These five superfoods have been used for centuries and are now backed by modern scientific research.</p>
-
-  //       <h3>1. Bitter Gourd (Karela)</h3>
-  //       <p>Bitter gourd contains compounds that act similarly to insulin, helping lower blood sugar levels. Studies show it can reduce fasting blood glucose by up to 25%.</p>
-
-  //       <h3>2. Fenugreek Seeds (Methi)</h3>
-  //       <p>Rich in soluble fiber, fenugreek seeds slow down digestion and absorption of carbohydrates, leading to better blood sugar control.</p>
-
-  //       <h3>3. Turmeric (Haldi)</h3>
-  //       <p>Curcumin in turmeric has powerful anti-inflammatory properties and can improve insulin sensitivity.</p>
-
-  //       <h3>4. Amla (Indian Gooseberry)</h3>
-  //       <p>High in Vitamin C and chromium, amla helps regulate carbohydrate metabolism and has been shown to lower blood sugar levels.</p>
-
-  //       <h3>5. Cinnamon (Dalchini)</h3>
-  //       <p>Just half a teaspoon daily can improve insulin sensitivity and lower blood sugar levels by up to 29%.</p>
-  //     `,
-  //   },
-  {
-    id: 3,
-    title: "The Truth About Carbs: Why Dal-Rice Can Be Diabetes-Friendly",
-    excerpt:
-      "Breaking myths about carbohydrates and teaching you how to enjoy traditional meals while managing blood sugar.",
-    image:
-      "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
-    date: "Dec 22, 2024",
-    readTime: "7 min read",
-    category: "Nutrition",
-    platform: "medium",
-    author: "Rajesh Kumar",
-    content: `
-      <h2>Carbohydrates: Friend or Foe?</h2>
-      <p>The common belief that all carbs are bad for diabetes is a myth. The key is understanding which carbs to eat and how to combine them.</p>
-      
-      <h3>The Dal-Rice Combination</h3>
-      <p>Dal (lentils) and rice is a staple in Indian cuisine, and with the right approach, it can be part of a diabetes-friendly diet.</p>
-      
-      <h3>Why Dal is Your Friend</h3>
-      <p>Lentils are rich in protein and fiber, which slow down the digestion of rice and prevent blood sugar spikes. They also have a low glycemic index.</p>
-      
-      <h3>Smart Rice Choices</h3>
-      <p>Opt for brown rice, unpolished rice, or mix white rice with quinoa. Portion control is key – stick to 1/2 to 3/4 cup of cooked rice per meal.</p>
-      
-      <h3>The Perfect Ratio</h3>
-      <p>Use a 2:1 ratio of dal to rice. Add vegetables to increase fiber content and further slow down glucose absorption.</p>
-      
-      <h3>Timing Matters</h3>
-      <p>Have your dal-rice meal earlier in the day when your body is better at processing carbohydrates.</p>
-    `,
+    category: "Health & Wellness",
+    author: "Dt. Palak M. Acharya",
+    medium_url:
+      "https://medium.com/@nutriipal/why-health-matters-more-than-anything-1b1c00908166",
+    substack_url:
+      "https://open.substack.com/pub/nutriipal/p/my-healthy-learnings-in-2025?utm_campaign=post-expanded-share&utm_medium=post%20viewer",
+    linkedin_url:
+      "https://www.linkedin.com/posts/palak-acharya-8108551a6_my-first-substack-post-httpslnkdin-activity-7413576221529296896-ZJWi",
   },
 ];
 
-const categories = [
+const categories: string[] = [
   "All",
+  "Health & Wellness",
   "Diabetes",
   "Nutrition",
-  "Success Stories",
-  "Lifestyle",
-  "Education",
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-// DESIGN 1: Full-Screen Modal with Sidebar
-const Design1 = () => {
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+const BlogPage: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesCategory =
       selectedCategory === "All" || post.category === selectedCategory;
-    const matchesSearch = post.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
+  const handleReadArticle = (url: string): void => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handlePlatformClick = (e: React.MouseEvent, url: string): void => {
+    e.stopPropagation();
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pt-24 pb-20">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-8 text-center">
-          NutriiPal Blog
-        </h1>
-
-        {/* Search */}
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none bg-white/80"
-            />
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 relative overflow-hidden pt-16 sm:pt-24 pb-20">
+      {/* Background Pattern */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-5">
+        <div className="absolute top-10 left-10 text-6xl sm:text-8xl">🥬</div>
+        <div className="absolute top-40 right-20 text-5xl sm:text-7xl">🥕</div>
+        <div className="absolute bottom-32 left-32 text-7xl sm:text-9xl">
+          🥗
         </div>
-
-        {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-6 py-2 rounded-full font-semibold transition-all ${
-                selectedCategory === cat
-                  ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white"
-                  : "bg-white text-gray-700 border border-gray-200"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="absolute top-1/3 right-1/4 text-4xl sm:text-6xl">
+          🥑
         </div>
-
-        {/* Blog Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {filteredPosts.map((post) => (
-            <motion.div
-              key={post.id}
-              whileHover={{ y: -5 }}
-              onClick={() => setSelectedPost(post)}
-              className="bg-white rounded-3xl overflow-hidden shadow-xl cursor-pointer border-2 border-green-100 hover:border-green-300 transition-all"
-            >
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <div className="text-xs text-emerald-600 font-bold mb-2">
-                  {post.category}
-                </div>
-                <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                  {post.title}
-                </h3>
-                <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                  {post.excerpt}
-                </p>
-                <div className="flex justify-between text-xs text-gray-500">
-                  <span>{post.date}</span>
-                  <span>{post.readTime}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="absolute bottom-20 right-40 text-5xl sm:text-7xl">
+          🍅
         </div>
+        <div className="absolute top-2/3 left-20 text-6xl sm:text-8xl">📚</div>
       </div>
 
-      {/* Full Screen Modal */}
-      <AnimatePresence>
-        {selectedPost && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex"
-          >
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30 }}
-              className="ml-auto w-full md:w-2/3 bg-white overflow-y-auto"
-            >
-              {/* Header */}
-              <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center z-10">
-                <div className="flex items-center gap-3">
-                  <BookOpen className="w-6 h-6 text-emerald-600" />
-                  <span className="font-bold text-gray-900">Reading Mode</span>
-                </div>
-                <button
-                  onClick={() => setSelectedPost(null)}
-                  className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="max-w-3xl mx-auto p-8">
-                <img
-                  src={selectedPost.image}
-                  alt={selectedPost.title}
-                  className="w-full h-64 object-cover rounded-2xl mb-6"
-                />
-                <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold mb-4">
-                  {selectedPost.category}
-                </div>
-                <h1 className="text-4xl font-bold mb-4">
-                  {selectedPost.title}
-                </h1>
-                <div className="flex items-center gap-6 text-gray-600 mb-8 pb-8 border-b">
-                  <span>By {selectedPost.author}</span>
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" /> {selectedPost.date}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" /> {selectedPost.readTime}
-                  </span>
-                </div>
-                <div
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: selectedPost.content }}
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-// DESIGN 2: Expanding Cards (Accordion Style)
-const Design2 = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pt-24 pb-20">
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-12 text-center">
-          NutriiPal Blog
-        </h1>
-
-        <div className="space-y-4">
-          {blogPosts.map((post) => (
-            <motion.div
-              key={post.id}
-              layout
-              className="bg-white rounded-3xl overflow-hidden shadow-xl border-2 border-green-100"
-            >
-              {/* Preview */}
-              <div
-                onClick={() =>
-                  setExpandedId(expandedId === post.id ? null : post.id)
-                }
-                className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex gap-6">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-32 h-32 object-cover rounded-2xl flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <div className="text-xs text-emerald-600 font-bold mb-2">
-                      {post.category}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">{post.title}</h3>
-                    <p className="text-gray-600 mb-3">{post.excerpt}</p>
-                    <div className="flex gap-4 text-sm text-gray-500">
-                      <span>{post.author}</span>
-                      <span>•</span>
-                      <span>{post.date}</span>
-                      <span>•</span>
-                      <span>{post.readTime}</span>
-                    </div>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: expandedId === post.id ? 90 : 0 }}
-                    className="flex-shrink-0"
-                  >
-                    <ChevronRight className="w-6 h-6 text-gray-400" />
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Expanded Content */}
-              <AnimatePresence>
-                {expandedId === post.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="border-t border-gray-200 overflow-hidden"
-                  >
-                    <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50">
-                      <div
-                        className="prose prose-lg max-w-none"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                      />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// DESIGN 3: Split View with Navigation
-const Design3 = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedPost = blogPosts[selectedIndex];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pt-24">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-12 text-center px-4">
-          NutriiPal Blog
-        </h1>
-
-        <div className="grid md:grid-cols-12 gap-6 px-4 pb-20">
-          {/* Left Sidebar - Article List */}
-          <div className="md:col-span-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-            {blogPosts.map((post, index) => (
-              <motion.div
-                key={post.id}
-                onClick={() => setSelectedIndex(index)}
-                whileHover={{ scale: 1.02 }}
-                className={`p-4 rounded-2xl cursor-pointer transition-all ${
-                  selectedIndex === index
-                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
-                    : "bg-white hover:bg-gray-50"
-                }`}
-              >
-                <div className="flex gap-3">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-20 h-20 object-cover rounded-xl"
-                  />
-                  <div className="flex-1">
-                    <h4
-                      className={`font-bold line-clamp-2 mb-1 ${
-                        selectedIndex === index ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {post.title}
-                    </h4>
-                    <p
-                      className={`text-xs ${
-                        selectedIndex === index
-                          ? "text-white/80"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      {post.readTime}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex justify-center mb-4 sm:mb-6">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl">
+              <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+            </div>
           </div>
-
-          {/* Right Content Area */}
-          <div className="md:col-span-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="bg-white rounded-3xl p-8 shadow-2xl max-h-[calc(100vh-200px)] overflow-y-auto"
-              >
-                <img
-                  src={selectedPost.image}
-                  alt={selectedPost.title}
-                  className="w-full h-64 object-cover rounded-2xl mb-6"
-                />
-                <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold mb-4">
-                  {selectedPost.category}
-                </div>
-                <h2 className="text-4xl font-bold mb-4">
-                  {selectedPost.title}
-                </h2>
-                <div className="flex items-center gap-6 text-gray-600 mb-8 pb-8 border-b">
-                  <span>By {selectedPost.author}</span>
-                  <span>•</span>
-                  <span>{selectedPost.date}</span>
-                  <span>•</span>
-                  <span>{selectedPost.readTime}</span>
-                </div>
-                <div
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: selectedPost.content }}
-                />
-
-                {/* Navigation */}
-                <div className="flex justify-between mt-8 pt-8 border-t">
-                  <button
-                    onClick={() =>
-                      setSelectedIndex(
-                        (prev) =>
-                          (prev - 1 + blogPosts.length) % blogPosts.length
-                      )
-                    }
-                    className="flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                    Previous
-                  </button>
-                  <button
-                    onClick={() =>
-                      setSelectedIndex((prev) => (prev + 1) % blogPosts.length)
-                    }
-                    className="flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700"
-                  >
-                    Next
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Main Component with Design Selector
-const BlogPage = () => {
-  const [selectedDesign, setSelectedDesign] = useState(1);
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredPosts = blogPosts.filter((post) => {
-    const matchesCategory =
-      selectedCategory === "All" || post.category === selectedCategory;
-    const matchesSearch = post.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  return (
-    <div className="w-full">
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pt-24 pb-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-8 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-blue-600 bg-clip-text text-transparent mb-3 sm:mb-4 px-4">
             NutriiPal Blog
           </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed px-4">
+            Expert insights on diabetes reversal, nutrition science, and healthy
+            living
+          </p>
+        </div>
 
-          {/* Search */}
-          <div className="max-w-2xl mx-auto mb-8">
+        {/* Search and Filter Section */}
+        <div className="mb-8 sm:mb-12">
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -942,125 +119,214 @@ const BlogPage = () => {
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none bg-white/80"
+                className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-2xl border-2 border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none text-base sm:text-lg bg-white/80 backdrop-blur transition-all"
               />
             </div>
           </div>
 
-          {/* Categories */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((cat) => (
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 px-2">
+            {categories.map((category) => (
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-2 rounded-full font-semibold transition-all ${
-                  selectedCategory === cat
-                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white"
-                    : "bg-white text-gray-700 border border-gray-200"
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 sm:px-6 py-2 rounded-full font-semibold transition-all text-sm sm:text-base ${
+                  selectedCategory === category
+                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
+                    : "bg-white/80 text-gray-700 hover:bg-white border border-gray-200"
                 }`}
               >
-                {cat}
+                {category}
               </button>
-            ))}
-          </div>
-
-          {/* Blog Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
-            {filteredPosts.map((post) => (
-              <motion.div
-                key={post.id}
-                whileHover={{ y: -5 }}
-                onClick={() => setSelectedPost(post)}
-                className="bg-white rounded-3xl overflow-hidden shadow-xl cursor-pointer border-2 border-green-100 hover:border-green-300 transition-all"
-              >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <div className="text-xs text-emerald-600 font-bold mb-2">
-                    {post.category}
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>{post.date}</span>
-                    <span>{post.readTime}</span>
-                  </div>
-                </div>
-              </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Full Screen Modal */}
-        <AnimatePresence>
-          {selectedPost && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex"
+        {/* Blog Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+          {filteredPosts.map((post) => (
+            <article
+              key={post.id}
+              onMouseEnter={() => setHoveredId(post.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              style={{
+                transform:
+                  hoveredId === post.id
+                    ? "translateY(-10px) scale(1.02)"
+                    : "translateY(0) scale(1)",
+                transition: "all 0.3s ease",
+              }}
+              className="bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-green-100 hover:border-green-300 transition-all cursor-pointer"
+              onClick={() => handleReadArticle(post.medium_url)}
             >
-              <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ type: "spring", damping: 30 }}
-                className="ml-auto w-full md:w-2/3 bg-white overflow-y-auto"
-              >
-                {/* Header */}
-                <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center z-10">
-                  <div className="flex items-center gap-3">
-                    <BookOpen className="w-6 h-6 text-emerald-600" />
-                    <span className="font-bold text-gray-900">
-                      Reading Mode
-                    </span>
+              {/* Image */}
+              <div className="relative overflow-hidden h-48 sm:h-56">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                  style={{
+                    transform:
+                      hoveredId === post.id ? "scale(1.1)" : "scale(1)",
+                    transition: "transform 0.5s ease",
+                  }}
+                />
+                <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+                  <span className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs font-bold">
+                    {post.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-4 sm:p-6">
+                {/* Meta Info */}
+                <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>{post.date}</span>
                   </div>
-                  <button
-                    onClick={() => setSelectedPost(null)}
-                    className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>{post.readTime}</span>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="max-w-3xl mx-auto p-8">
-                  <img
-                    src={selectedPost.image}
-                    alt={selectedPost.title}
-                    className="w-full h-64 object-cover rounded-2xl mb-6"
-                  />
-                  <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold mb-4">
-                    {selectedPost.category}
-                  </div>
-                  <h1 className="text-4xl font-bold mb-4">
-                    {selectedPost.title}
-                  </h1>
-                  <div className="flex items-center gap-6 text-gray-600 mb-8 pb-8 border-b">
-                    <span>By {selectedPost.author}</span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" /> {selectedPost.date}
+                {/* Title */}
+                <h2
+                  className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 line-clamp-2 transition-colors"
+                  style={{
+                    color: hoveredId === post.id ? "#059669" : "#111827",
+                  }}
+                >
+                  {post.title}
+                </h2>
+
+                {/* Excerpt */}
+                <p className="text-gray-600 text-sm mb-3 sm:mb-4 line-clamp-3 leading-relaxed">
+                  {post.excerpt}
+                </p>
+
+                {/* Author and CTA */}
+                <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-100">
+                  <span className="text-xs sm:text-sm text-gray-600">
+                    By{" "}
+                    <span className="font-semibold text-emerald-600">
+                      {post.author}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" /> {selectedPost.readTime}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-emerald-600 font-semibold text-sm">
+                      Read More
                     </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={(e) => handlePlatformClick(e, post.medium_url)}
+                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                        title="Read on Medium"
+                      >
+                        {/* <i className="fa-brands fa-medium"></i> */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 640 640"
+                        >
+                          <path d="M465.4 96C508.8 96 544 131.2 544 174.6L544 258.4C542.1 258.3 540.2 258.2 538.3 258.2L537.9 258.2C527.9 258.2 515.6 260.6 506.8 265C496.8 269.6 488.1 276.5 480.8 285.6C469 300.2 461.9 319.9 460.2 342C460.1 342.7 460.1 343.3 460 344C459.9 344.7 459.9 345.2 459.9 345.9C459.8 347.1 459.8 348.3 459.8 349.5C459.8 351.4 459.7 353.3 459.8 355.3C461 405.4 488 445.5 536.1 445.5C538.8 445.5 541.4 445.4 544 445.1L544 465.5C544 508.9 508.8 544.1 465.4 544.1L174.6 544C131.2 544 96 508.8 96 465.4L96 174.6C96 131.2 131.2 96 174.6 96L465.4 96zM178.3 202.9L178.6 203C191.8 206 198.4 210.4 198.4 226.4L198.4 413.6C198.4 429.6 191.7 434 178.5 437L178.2 437.1L178.2 439.9L231 439.9L231 437.1L230.7 437C217.5 434 210.8 429.6 210.8 413.6L210.8 237.3L296.9 439.8L301.8 439.8L390.4 231.6L390.4 418.2C389.3 430.8 382.6 434.7 370.7 437.4L370.4 437.5L370.4 440.2L462.3 440.2L462.3 437.5L462 437.4C450.1 434.7 443.3 430.8 442.1 418.2L442 226.4L442.1 226.4C442.1 210.4 448.8 206 462 203L462.3 202.9L462.3 200.2L390.1 200.2L323.1 357.6L256.1 200.2L178.3 200.2L178.3 202.9zM544 404.3C518.9 396.9 501 369.2 502.8 336.5L502.8 336.5L543.9 336.5L543.9 404.3zM537.6 268.7C539.9 268.7 542 269 544 269.6L544 327L503.8 327C505.3 293.4 517.4 269.1 537.6 268.7z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={(e) =>
+                          handlePlatformClick(e, post.substack_url)
+                        }
+                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                        title="Read on Substack"
+                      >
+                        <img
+                          src="https://cdn.simpleicons.org/substack/FF6719"
+                          alt="Substack"
+                          width="20"
+                          height="20"
+                        ></img>
+                      </button>
+                      <button
+                        onClick={(e) =>
+                          handlePlatformClick(e, post.linkedin_url || "")
+                        }
+                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                        title="Read on LinkedIn"
+                      >
+                        <i className="fa fa-linkedin"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div
-                    className="prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: selectedPost.content }}
-                  />
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* No Results */}
+        {filteredPosts.length === 0 && (
+          <div className="text-center py-20">
+            <div className="text-5xl sm:text-6xl mb-4">📭</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+              No articles found
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
+
+        {/* Newsletter CTA */}
+        <div className="mt-16 sm:mt-20 bg-gradient-to-br from-emerald-500 via-green-500 to-green-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+            Never Miss an Update
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-95 max-w-2xl mx-auto">
+            Subscribe to get our latest articles on diabetes reversal and
+            nutrition delivered to your inbox
+          </p>
+          <button
+            onClick={() =>
+              window.open("https://substack.com/@nutriipal", "_blank")
+            }
+            className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2"
+          >
+            Subscribe on Substack
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+
+        {/* Platform Links */}
+        <div className="mt-8 sm:mt-12 text-center">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
+            Follow us on
+          </p>
+          <div className="flex justify-center gap-4 sm:gap-6 flex-wrap px-4">
+            <a
+              href="https://medium.com/@nutriipal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
+            >
+              <span className="text-xl sm:text-2xl">📝</span>
+              <span className="font-semibold text-gray-700 text-sm sm:text-base">
+                Medium
+              </span>
+            </a>
+            <a
+              href="https://substack.com/@nutriipal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
+            >
+              <span className="text-xl sm:text-2xl">✉️</span>
+              <span className="font-semibold text-gray-700 text-sm sm:text-base">
+                Substack
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
