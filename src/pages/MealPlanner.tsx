@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChefHat, Sparkles, AlertCircle } from "lucide-react";
+import {
+  ChefHat,
+  Sparkles,
+  AlertCircle,
+  Clock,
+  Users,
+  ExternalLink,
+} from "lucide-react";
 
 const FODMAP_LOW = [
   "carrot",
@@ -18,6 +25,9 @@ const FODMAP_LOW = [
   "banana",
   "orange",
   "strawberry",
+  "lettuce",
+  "kale",
+  "eggplant",
 ];
 
 const FODMAP_HIGH = [
@@ -32,21 +42,20 @@ const FODMAP_HIGH = [
   "milk",
   "yogurt",
   "beans",
+  "asparagus",
+  "artichoke",
 ];
-
-type Nutrition = {
-  calories: number;
-  protein_g: number;
-  carbohydrates_total_g: number;
-  fat_total_g: number;
-};
 
 type Recipe = {
   id: number;
   title: string;
-  ingredients: string[];
-  instructions: string;
-  nutrition?: Nutrition;
+  image: string;
+  usedIngredients: string[];
+  missedIngredients: string[];
+  instructions: string[]; // Changed to string array for steps
+  readyInMinutes?: number;
+  servings?: number;
+  sourceUrl?: string;
   fodmapTag: "Low" | "Moderate" | "High";
 };
 
@@ -61,149 +70,148 @@ const MealPlanner: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const apiKey = "9xE0sAVr8Ykn+7oC4he4MA==M2BDqr9iE9oqavNm"; // TODO: move to env variable
+  // TODO: Replace with your Spoonacular API key
+  // Get free API key at: https://spoonacular.com/food-api/console#Dashboard
+  const SPOONACULAR_API_KEY = "c3b9db5d0f0e4ebca730896f4163b80b";
 
-  const parseIngredients = (input: string): string[] =>
+  const parseIngredients = (input: string): string =>
     input
       .split(",")
       .map((i) => i.trim().toLowerCase())
-      .filter((i) => i.length > 0);
+      .filter((i) => i.length > 0)
+      .join(",");
 
-  const getFodmapTagForIngredients = (
-    ings: string[]
-  ): "Low" | "Moderate" | "High" => {
-    let highFound = false;
+  const getFodmapTag = (ingredients: string[]): "Low" | "Moderate" | "High" => {
+    let highCount = 0;
     let lowCount = 0;
 
-    for (const ing of ings) {
-      if (FODMAP_HIGH.some((h) => ing.includes(h))) {
-        highFound = true;
-      }
-      if (FODMAP_LOW.some((l) => ing.includes(l))) {
-        lowCount += 1;
-      }
+    for (const ing of ingredients) {
+      const ingLower = ing.toLowerCase();
+      if (FODMAP_HIGH.some((h) => ingLower.includes(h))) highCount++;
+      if (FODMAP_LOW.some((l) => ingLower.includes(l))) lowCount++;
     }
 
-    if (highFound) return "High";
-    if (lowCount === ings.length && ings.length > 0) return "Low";
+    if (highCount > 0) return "High";
+    if (lowCount === ingredients.length && ingredients.length > 0) return "Low";
     return "Moderate";
   };
 
-  const buildSimpleRecipes = (ings: string[]): Recipe[] => {
-    const base: Recipe[] = [];
+  const fetchRecipesByIngredients = async (ingredients: string) => {
+    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(
+      ingredients
+    )}&number=5&ranking=2&ignorePantry=true&apiKey=${SPOONACULAR_API_KEY}`;
 
-    if (ings.length === 0) return base;
-
-    const allIngs = [...ings];
-    const titleBase = allIngs
-      .slice(0, 3)
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join(", ");
-
-    const candidates: Recipe[] = [
-      {
-        id: 1,
-        title: `${titleBase} Stir-Fry`,
-        ingredients: allIngs,
-        instructions:
-          "Heat oil in a pan, add chopped ingredients, stir-fry on medium heat until cooked. Season with salt, pepper and herbs.",
-        fodmapTag: getFodmapTagForIngredients(allIngs),
-      },
-      {
-        id: 2,
-        title: `${titleBase} Bowl`,
-        ingredients: allIngs,
-        instructions:
-          "Cook any grains (like rice or oats) if available, top with remaining ingredients. Add dressing or spices to taste.",
-        fodmapTag: getFodmapTagForIngredients(allIngs),
-      },
-      {
-        id: 3,
-        title: `${titleBase} Quick Salad`,
-        ingredients: allIngs,
-        instructions:
-          "Chop all ingredients into bite-sized pieces, toss with lemon juice, olive oil, salt, and pepper.",
-        fodmapTag: getFodmapTagForIngredients(allIngs),
-      },
-    ];
-
-    const unique = new Map<string, Recipe>();
-    for (const r of candidates) unique.set(r.title, r);
-    return Array.from(unique.values());
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch recipes");
+    }
+    return response.json();
   };
 
-  const fetchNutrition = async (
-    ingredients: string[]
-  ): Promise<Nutrition | undefined> => {
-    if (!ingredients.length) return undefined;
+  const stripHtmlTags = (html: string): string => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
 
-    const query = ingredients.join(", ");
-    try {
-      const res = await fetch(
-        `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(
-          query
-        )}`,
-        {
-          headers: {
-            "X-Api-Key": apiKey,
-          },
-        }
-      );
+  const parseInstructions = (instructions: string): string[] => {
+    if (!instructions) return [];
 
-      if (!res.ok) {
-        console.error("Nutrition API error", await res.text());
-        return undefined;
-      }
+    // Strip HTML tags
+    const cleanText = stripHtmlTags(instructions);
 
-      const data = await res.json();
+    // Split by periods, newlines, or numbered lists
+    const steps = cleanText
+      .split(/\d+\.|\.(?=[A-Z])|[\n\r]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 10); // Filter out very short fragments
 
-      if (!Array.isArray(data) || data.length === 0) return undefined;
+    return steps;
+  };
 
-      const totals = data.reduce(
-        (acc: Nutrition, item: any) => {
-          return {
-            // calories: acc.calories + (item.calories || 0),
-            // protein_g: acc.protein_g + (item.protein_g || 0),
-            carbohydrates_total_g:
-              acc.carbohydrates_total_g + (item.carbohydrates_total_g || 0),
-            fat_total_g: acc.fat_total_g + (item.fat_total_g || 0),
-          };
-        },
-        { calories: 0, protein_g: 0, carbohydrates_total_g: 0, fat_total_g: 0 }
-      );
+  const fetchRecipeInstructions = async (recipeId: number) => {
+    const url = `https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=false&apiKey=${SPOONACULAR_API_KEY}`;
 
-      return totals;
-    } catch (e) {
-      console.error(e);
-      return undefined;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return null;
     }
+    return response.json();
   };
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
+    if (SPOONACULAR_API_KEY === "YOUR_API_KEY_HERE") {
+      setError(
+        "Please add your Spoonacular API key. Get one free at https://spoonacular.com/food-api/console#Dashboard"
+      );
+      return;
+    }
+
     const ings = parseIngredients(ingredientInput);
 
-    if (!ings.length) {
+    if (!ings) {
       setError("Please list at least one ingredient, separated by commas.");
       return;
     }
 
     setLoading(true);
-    try {
-      const baseRecipes = buildSimpleRecipes(ings);
 
-      const withNutrition = await Promise.all(
-        baseRecipes.map(async (r) => {
-          const nutrition = await fetchNutrition(r.ingredients);
-          return { ...r, nutrition };
+    try {
+      // Step 1: Find recipes by ingredients
+      const recipeResults = await fetchRecipesByIngredients(ings);
+
+      if (!recipeResults || recipeResults.length === 0) {
+        setError(
+          "No recipes found with these ingredients. Try different ingredients or add more common items."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Fetch detailed instructions for each recipe
+      const detailedRecipes = await Promise.all(
+        recipeResults.slice(0, 4).map(async (recipe: any) => {
+          const details = await fetchRecipeInstructions(recipe.id);
+
+          const usedIngredientNames = recipe.usedIngredients.map(
+            (ing: any) => ing.name
+          );
+          const missedIngredientNames = recipe.missedIngredients.map(
+            (ing: any) => ing.name
+          );
+
+          const instructionSteps = parseInstructions(
+            details?.instructions ||
+              "Instructions not available. Check the source link for details."
+          );
+
+          return {
+            id: recipe.id,
+            title: recipe.title,
+            image: recipe.image,
+            usedIngredients: usedIngredientNames,
+            missedIngredients: missedIngredientNames,
+            instructions: instructionSteps,
+            readyInMinutes: details?.readyInMinutes,
+            servings: details?.servings,
+            sourceUrl: details?.sourceUrl,
+            fodmapTag: getFodmapTag([
+              ...usedIngredientNames,
+              ...missedIngredientNames,
+            ]),
+          };
         })
       );
 
-      setRecipes(withNutrition);
+      setRecipes(detailedRecipes);
     } catch (err) {
-      setError("Something went wrong while generating recipes.");
+      console.error(err);
+      setError(
+        "Failed to fetch recipes. Please check your API key and internet connection."
+      );
     } finally {
       setLoading(false);
     }
@@ -211,7 +219,7 @@ const MealPlanner: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 relative overflow-hidden pt-24 pb-20">
-      {/* Fresh Vegetables Background Pattern */}
+      {/* Background Pattern */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-5">
         <div className="absolute top-10 left-10 text-8xl">🥬</div>
         <div className="absolute top-40 right-20 text-7xl">🥕</div>
@@ -270,10 +278,11 @@ const MealPlanner: React.FC = () => {
             What's in your fridge?
           </h1>
           <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            Enter your ingredients and get quick recipe ideas with{" "}
+            Enter your ingredients and get{" "}
             <span className="font-semibold text-green-600">
-              nutrition info and FODMAP tags
-            </span>
+              real recipe recommendations
+            </span>{" "}
+            powered by Spoonacular
           </p>
         </motion.div>
 
@@ -292,57 +301,59 @@ const MealPlanner: React.FC = () => {
             </h2>
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 font-semibold mb-3">
-              What's available in your kitchen?
-            </label>
-            <textarea
-              className="w-full rounded-2xl bg-white/50 backdrop-blur border-2 border-gray-200 px-5 py-4 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-32 transition-all"
-              placeholder="e.g. chicken, rice, spinach, tomato, 200g broccoli"
-              value={ingredientInput}
-              onChange={(e) => setIngredientInput(e.target.value)}
-            />
-            <p className="mt-3 text-sm text-gray-600 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-600" />
-              <span>
-                Tip: Separate items with commas. Include quantities for more
-                accurate nutrition, e.g. "200g chicken, 1 cup rice".
-              </span>
-            </p>
-          </div>
+          <form onSubmit={handleGenerate}>
+            <div className="mb-6">
+              <label className="block text-gray-700 font-semibold mb-3">
+                What's available in your kitchen?
+              </label>
+              <textarea
+                className="w-full rounded-2xl bg-white/50 backdrop-blur border-2 border-gray-200 px-5 py-4 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-32 transition-all"
+                placeholder="e.g. chicken, rice, spinach, tomato, bell pepper, carrots"
+                value={ingredientInput}
+                onChange={(e) => setIngredientInput(e.target.value)}
+              />
+              <p className="mt-3 text-sm text-gray-600 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-600" />
+                <span>
+                  Tip: List main ingredients you want to use. The API will
+                  suggest recipes and show what else you might need.
+                </span>
+              </p>
+            </div>
 
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl text-red-700 flex items-start gap-3"
-            >
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-              <span>{error}</span>
-            </motion.div>
-          )}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl text-red-700 flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </motion.div>
+            )}
 
-          <div className="flex justify-end">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleGenerate}
-              disabled={loading}
-              className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 px-8 py-4 text-lg font-bold text-white shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed transition-all"
-            >
-              {loading ? (
-                <>
-                  <span className="h-5 w-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <ChefHat className="w-5 h-5" />
-                  Generate Recipes
-                </>
-              )}
-            </motion.button>
-          </div>
+            <div className="flex justify-end">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                type="submit"
+                disabled={loading}
+                className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 px-8 py-4 text-lg font-bold text-white shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+              >
+                {loading ? (
+                  <>
+                    <span className="h-5 w-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                    Finding Recipes...
+                  </>
+                ) : (
+                  <>
+                    <ChefHat className="w-5 h-5" />
+                    Find Recipes
+                  </>
+                )}
+              </motion.button>
+            </div>
+          </form>
         </motion.div>
 
         {/* Recipe Results */}
@@ -355,123 +366,172 @@ const MealPlanner: React.FC = () => {
               exit={{ opacity: 0 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Your Recipe Ideas 🍽️
+                Recipe Recommendations 🍽️
               </h2>
               {recipes.map((recipe, index) => (
                 <motion.div
                   key={recipe.id}
-                  className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl p-6 md:p-8 shadow-xl"
+                  className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {recipe.title}
-                    </h3>
-                    <span
-                      className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap ${
-                        recipe.fodmapTag === "Low"
-                          ? "bg-emerald-100 text-emerald-700 border-2 border-emerald-300"
-                          : recipe.fodmapTag === "High"
-                          ? "bg-red-100 text-red-700 border-2 border-red-300"
-                          : "bg-amber-100 text-amber-700 border-2 border-amber-300"
-                      }`}
-                    >
-                      FODMAP: {recipe.fodmapTag}
-                    </span>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div className="bg-green-50 rounded-2xl p-5 border border-green-100">
-                      <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <span className="text-xl">🥘</span>
-                        Ingredients
-                      </h4>
-                      <ul className="space-y-2">
-                        {recipe.ingredients.map((ing, idx) => (
-                          <li
-                            key={idx}
-                            className="text-gray-700 flex items-start gap-2"
-                          >
-                            <span className="text-green-600 font-bold mt-1">
-                              •
-                            </span>
-                            <span className="capitalize">{ing}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  <div className="grid md:grid-cols-3 gap-6 p-6 md:p-8">
+                    {/* Recipe Image */}
+                    <div className="md:col-span-1">
+                      <img
+                        src={recipe.image}
+                        alt={recipe.title}
+                        className="w-full h-64 md:h-full object-cover rounded-2xl shadow-lg"
+                      />
                     </div>
 
-                    <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
-                      <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <span className="text-xl">👨‍🍳</span>
-                        Instructions
-                      </h4>
-                      <p className="text-gray-700 leading-relaxed">
-                        {recipe.instructions}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-5 border border-green-100">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <span className="text-xl">📊</span>
-                      Nutrition Info (Whole Recipe)
-                    </h4>
-                    {recipe.nutrition ? (
-                      <div className="overflow-x-auto">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                          {/* <div className="bg-white/60 rounded-xl p-4 text-center">
-                            <div className="text-3xl font-bold text-emerald-600">
-                              {Math.round(recipe.nutrition.calories)}
-                            </div>
-                            <div className="text-sm text-gray-600 font-semibold mt-1">
-                              Calories
-                            </div>
-                          </div>
-                          <div className="bg-white/60 rounded-xl p-4 text-center">
-                            <div className="text-3xl font-bold text-blue-600">
-                              {recipe.nutrition.protein_g.toFixed(1)}g
-                            </div>
-                            <div className="text-sm text-gray-600 font-semibold mt-1">
-                              Protein
-                            </div>
-                          </div> */}
-                          <div className="bg-white/60 rounded-xl p-4 text-center">
-                            <div className="text-3xl font-bold text-purple-600">
-                              {recipe.nutrition.carbohydrates_total_g.toFixed(
-                                1
-                              )}
-                              g
-                            </div>
-                            <div className="text-sm text-gray-600 font-semibold mt-1">
-                              Carbs
-                            </div>
-                          </div>
-                          <div className="bg-white/60 rounded-xl p-4 text-center">
-                            <div className="text-3xl font-bold text-orange-600">
-                              {recipe.nutrition.fat_total_g.toFixed(1)}g
-                            </div>
-                            <div className="text-sm text-gray-600 font-semibold mt-1">
-                              Fat
-                            </div>
-                          </div>
-                        </div>
-                        <p className="mt-4 text-xs text-gray-600 text-center">
-                          Values are approximate, computed using the Nutrition
-                          API from ingredient text.
-                        </p>
+                    {/* Recipe Details */}
+                    <div className="md:col-span-2 space-y-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <h3 className="text-2xl font-bold text-gray-900 flex-1">
+                          {recipe.title}
+                        </h3>
+                        <span
+                          className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap ${
+                            recipe.fodmapTag === "Low"
+                              ? "bg-emerald-100 text-emerald-700 border-2 border-emerald-300"
+                              : recipe.fodmapTag === "High"
+                              ? "bg-red-100 text-red-700 border-2 border-red-300"
+                              : "bg-amber-100 text-amber-700 border-2 border-amber-300"
+                          }`}
+                        >
+                          FODMAP: {recipe.fodmapTag}
+                        </span>
                       </div>
-                    ) : (
-                      <p className="text-sm text-gray-600 text-center py-4">
-                        Could not fetch nutrition for this recipe. Try adding
-                        quantities to your ingredients.
-                      </p>
-                    )}
+
+                      {/* Recipe Meta */}
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                        {recipe.readyInMinutes && (
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-emerald-600" />
+                            <span className="font-semibold">
+                              {recipe.readyInMinutes} mins
+                            </span>
+                          </div>
+                        )}
+                        {recipe.servings && (
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-emerald-600" />
+                            <span className="font-semibold">
+                              {recipe.servings} servings
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Ingredients */}
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {recipe.usedIngredients.length > 0 && (
+                          <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+                            <h4 className="font-bold text-green-800 mb-2 text-sm">
+                              ✅ You Have
+                            </h4>
+                            <ul className="space-y-1">
+                              {recipe.usedIngredients.map((ing, idx) => (
+                                <li
+                                  key={idx}
+                                  className="text-sm text-gray-700 capitalize"
+                                >
+                                  • {ing}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {recipe.missedIngredients.length > 0 && (
+                          <div className="bg-orange-50 rounded-xl p-4 border border-orange-100">
+                            <h4 className="font-bold text-orange-800 mb-2 text-sm">
+                              🛒 You'll Need
+                            </h4>
+                            <ul className="space-y-1">
+                              {recipe.missedIngredients.map((ing, idx) => (
+                                <li
+                                  key={idx}
+                                  className="text-sm text-gray-700 capitalize"
+                                >
+                                  • {ing}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Instructions Preview */}
+                      <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                        <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+                          <span>👨‍🍳</span>
+                          Instructions
+                        </h4>
+                        {recipe.instructions.length > 0 ? (
+                          <ol className="space-y-2">
+                            {recipe.instructions
+                              .slice(0, 3)
+                              .map((step, idx) => (
+                                <li
+                                  key={idx}
+                                  className="text-sm text-gray-700 flex items-start gap-2"
+                                >
+                                  <span className="flex-shrink-0 w-5 h-5 bg-blue-200 text-blue-800 rounded-full flex items-center justify-center text-xs font-bold">
+                                    {idx + 1}
+                                  </span>
+                                  <span className="leading-relaxed">
+                                    {step}
+                                  </span>
+                                </li>
+                              ))}
+                            {recipe.instructions.length > 3 && (
+                              <li className="text-sm text-gray-500 italic ml-7">
+                                + {recipe.instructions.length - 3} more steps...
+                              </li>
+                            )}
+                          </ol>
+                        ) : (
+                          <p className="text-sm text-gray-700">
+                            Instructions not available. Click "View Full Recipe"
+                            below for details.
+                          </p>
+                        )}
+                      </div>
+
+                      {/* View Full Recipe Button */}
+                      {recipe.sourceUrl && (
+                        <a
+                          href={recipe.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all"
+                        >
+                          View Full Recipe
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}
+
+              {/* API Attribution */}
+              <div className="text-center text-sm text-gray-600 pt-4">
+                <p>
+                  Recipes powered by{" "}
+                  <a
+                    href="https://spoonacular.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-emerald-600 font-semibold hover:underline"
+                  >
+                    Spoonacular API
+                  </a>
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
