@@ -19,6 +19,7 @@ import ReviewCarousel from "../components/ReviewCarousel";
 import { openExternal } from "../utils/openExternal";
 import { URLS } from "../constants/urls";
 import ResultStats from "../components/ResultStats";
+import NewsletterSignup from "../components/NewsletterSignup";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -618,7 +619,7 @@ const Home = () => {
         </section>
 
         {/* Newsletter Section */}
-        <section className="py-20 sm:py-28">
+        {/* <section className="py-20 sm:py-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               variants={fadeUp}
@@ -695,7 +696,8 @@ const Home = () => {
               </div>
             </motion.div>
           </div>
-        </section>
+        </section> */}
+        <NewsletterSignup />
 
         {/* Final CTA */}
         <section className="py-20 sm:py-28 pb-32">
