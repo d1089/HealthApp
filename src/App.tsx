@@ -43,8 +43,8 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <i className="fa fa-whatsapp whatsapp-icon"></i>
-          {/* <i className="fa-brands fa-whatsapp"></i> */}
+          {/* <i className="fa fa-whatsapp whatsapp-icon"></i> */}
+          <i className="fa-brands fa-whatsapp"></i>
         </a>
       </div>
     </Router>
