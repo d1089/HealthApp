@@ -17,8 +17,8 @@ interface BlogPost {
   readTime: string;
   category: string;
   author: string;
-  medium_url: string;
-  substack_url: string;
+  medium_url?: string;
+  substack_url?: string;
   linkedin_url?: string;
 }
 
@@ -26,8 +26,7 @@ const blogPosts: BlogPost[] = [
   {
     id: 1,
     title: "Why Health Matters More Than Anything",
-    excerpt:
-      "Hey ! you must have heard this saying “Health is wealth” although it sounds very clich'e — but this saying holds a lot of truth as I have experienced it myself that unless you are not healthy — nothing matters. The body is a magnificient machine that would",
+    excerpt: `Hey ! you must have heard this saying "Health is wealth" although it sounds very clich'e — but this saying holds a lot of truth as I have experienced it myself that unless you are not healthy — nothing matters. The body is a magnificient machine that would`,
     image:
       "https://images.unsplash.com/photo-1765795019773-3330d68f238a?auto=format&fit=crop&w=800&q=80",
     date: "Jan 4, 2026",
@@ -40,6 +39,20 @@ const blogPosts: BlogPost[] = [
       "https://open.substack.com/pub/nutriipal/p/my-healthy-learnings-in-2025?utm_campaign=post-expanded-share&utm_medium=post%20viewer",
     linkedin_url:
       "https://www.linkedin.com/posts/palak-acharya-8108551a6_my-first-substack-post-httpslnkdin-activity-7413576221529296896-ZJWi",
+  },
+  {
+    id: 2,
+    title: "Things to Remember Before Using Continuous Glucose Monitor",
+    excerpt:
+      "Continuous Glucose Monitors (CGMs) have revolutionized diabetes management by providing real-time insights into blood sugar levels. However, before you start using one, there are several important considerations to keep in mind to ensure you get the most accurate and useful data.",
+    image:
+      "https://as1.ftcdn.net/v2/jpg/14/40/46/08/1000_F_1440460840_8CZBEiKiMUsix54LwNVfuZGSMmOiuwuB.jpg",
+    date: "Feb 4, 2026",
+    readTime: "7 min read",
+    category: "Diabetes",
+    author: "Dt. Palak M. Acharya",
+    substack_url:
+      "https://nutriipal.substack.com/p/things-to-remember-before-using-continuous",
   },
 ];
 
@@ -64,13 +77,22 @@ const BlogPage: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleReadArticle = (url: string): void => {
-    window.open(url, "_blank", "noopener,noreferrer");
+  const handleReadArticle = (url?: string): void => {
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
   };
 
-  const handlePlatformClick = (e: React.MouseEvent, url: string): void => {
+  const handlePlatformClick = (e: React.MouseEvent, url?: string): void => {
     e.stopPropagation();
-    window.open(url, "_blank", "noopener,noreferrer");
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  // Helper function to get primary URL for card click
+  const getPrimaryUrl = (post: BlogPost): string | undefined => {
+    return post.medium_url || post.substack_url || post.linkedin_url;
   };
 
   return (
@@ -157,7 +179,7 @@ const BlogPage: React.FC = () => {
                 transition: "all 0.3s ease",
               }}
               className="bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-green-100 hover:border-green-300 transition-all cursor-pointer"
-              onClick={() => handleReadArticle(post.medium_url)}
+              onClick={() => handleReadArticle(getPrimaryUrl(post))}
             >
               {/* Image */}
               <div className="relative overflow-hidden h-48 sm:h-56">
@@ -220,43 +242,57 @@ const BlogPage: React.FC = () => {
                       Read More
                     </span>
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={(e) => handlePlatformClick(e, post.medium_url)}
-                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
-                        title="Read on Medium"
-                      >
-                        {/* <i className="fa-brands fa-medium"></i> */}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 640 640"
+                      {post.medium_url && (
+                        <button
+                          onClick={(e) =>
+                            handlePlatformClick(e, post.medium_url)
+                          }
+                          className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                          title="Read on Medium"
                         >
-                          <path d="M465.4 96C508.8 96 544 131.2 544 174.6L544 258.4C542.1 258.3 540.2 258.2 538.3 258.2L537.9 258.2C527.9 258.2 515.6 260.6 506.8 265C496.8 269.6 488.1 276.5 480.8 285.6C469 300.2 461.9 319.9 460.2 342C460.1 342.7 460.1 343.3 460 344C459.9 344.7 459.9 345.2 459.9 345.9C459.8 347.1 459.8 348.3 459.8 349.5C459.8 351.4 459.7 353.3 459.8 355.3C461 405.4 488 445.5 536.1 445.5C538.8 445.5 541.4 445.4 544 445.1L544 465.5C544 508.9 508.8 544.1 465.4 544.1L174.6 544C131.2 544 96 508.8 96 465.4L96 174.6C96 131.2 131.2 96 174.6 96L465.4 96zM178.3 202.9L178.6 203C191.8 206 198.4 210.4 198.4 226.4L198.4 413.6C198.4 429.6 191.7 434 178.5 437L178.2 437.1L178.2 439.9L231 439.9L231 437.1L230.7 437C217.5 434 210.8 429.6 210.8 413.6L210.8 237.3L296.9 439.8L301.8 439.8L390.4 231.6L390.4 418.2C389.3 430.8 382.6 434.7 370.7 437.4L370.4 437.5L370.4 440.2L462.3 440.2L462.3 437.5L462 437.4C450.1 434.7 443.3 430.8 442.1 418.2L442 226.4L442.1 226.4C442.1 210.4 448.8 206 462 203L462.3 202.9L462.3 200.2L390.1 200.2L323.1 357.6L256.1 200.2L178.3 200.2L178.3 202.9zM544 404.3C518.9 396.9 501 369.2 502.8 336.5L502.8 336.5L543.9 336.5L543.9 404.3zM537.6 268.7C539.9 268.7 542 269 544 269.6L544 327L503.8 327C505.3 293.4 517.4 269.1 537.6 268.7z" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={(e) =>
-                          handlePlatformClick(e, post.substack_url)
-                        }
-                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
-                        title="Read on Substack"
-                      >
-                        <img
-                          src="https://cdn.simpleicons.org/substack/FF6719"
-                          alt="Substack"
-                          width="20"
-                          height="20"
-                        ></img>
-                      </button>
-                      <button
-                        onClick={(e) =>
-                          handlePlatformClick(e, post.linkedin_url || "")
-                        }
-                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
-                        title="Read on LinkedIn"
-                      >
-                        <i className="fa-brands fa-linkedin"></i>
-                        {/* <i class="fa-brands fa-medium-m"></i> */}
-                      </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 640 640"
+                            className="w-5 h-5"
+                          >
+                            <path d="M465.4 96C508.8 96 544 131.2 544 174.6L544 258.4C542.1 258.3 540.2 258.2 538.3 258.2L537.9 258.2C527.9 258.2 515.6 260.6 506.8 265C496.8 269.6 488.1 276.5 480.8 285.6C469 300.2 461.9 319.9 460.2 342C460.1 342.7 460.1 343.3 460 344C459.9 344.7 459.9 345.2 459.9 345.9C459.8 347.1 459.8 348.3 459.8 349.5C459.8 351.4 459.7 353.3 459.8 355.3C461 405.4 488 445.5 536.1 445.5C538.8 445.5 541.4 445.4 544 445.1L544 465.5C544 508.9 508.8 544.1 465.4 544.1L174.6 544C131.2 544 96 508.8 96 465.4L96 174.6C96 131.2 131.2 96 174.6 96L465.4 96zM178.3 202.9L178.6 203C191.8 206 198.4 210.4 198.4 226.4L198.4 413.6C198.4 429.6 191.7 434 178.5 437L178.2 437.1L178.2 439.9L231 439.9L231 437.1L230.7 437C217.5 434 210.8 429.6 210.8 413.6L210.8 237.3L296.9 439.8L301.8 439.8L390.4 231.6L390.4 418.2C389.3 430.8 382.6 434.7 370.7 437.4L370.4 437.5L370.4 440.2L462.3 440.2L462.3 437.5L462 437.4C450.1 434.7 443.3 430.8 442.1 418.2L442 226.4L442.1 226.4C442.1 210.4 448.8 206 462 203L462.3 202.9L462.3 200.2L390.1 200.2L323.1 357.6L256.1 200.2L178.3 200.2L178.3 202.9zM544 404.3C518.9 396.9 501 369.2 502.8 336.5L502.8 336.5L543.9 336.5L543.9 404.3zM537.6 268.7C539.9 268.7 542 269 544 269.6L544 327L503.8 327C505.3 293.4 517.4 269.1 537.6 268.7z" />
+                          </svg>
+                        </button>
+                      )}
+                      {post.substack_url && (
+                        <button
+                          onClick={(e) =>
+                            handlePlatformClick(e, post.substack_url)
+                          }
+                          className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                          title="Read on Substack"
+                        >
+                          <img
+                            src="https://cdn.simpleicons.org/substack/FF6719"
+                            alt="Substack"
+                            width="20"
+                            height="20"
+                          />
+                        </button>
+                      )}
+                      {post.linkedin_url && (
+                        <button
+                          onClick={(e) =>
+                            handlePlatformClick(e, post.linkedin_url)
+                          }
+                          className="w-8 h-8 rounded-full bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all hover:scale-110"
+                          title="Read on LinkedIn"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="#0A66C2"
+                            className="w-5 h-5"
+                          >
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -291,7 +327,7 @@ const BlogPage: React.FC = () => {
             onClick={() =>
               window.open("https://substack.com/@nutriipal", "_blank")
             }
-            className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2"
+            className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2 hover:scale-105"
           >
             Subscribe on Substack
             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -308,9 +344,15 @@ const BlogPage: React.FC = () => {
               href="https://medium.com/@nutriipal"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200 hover:scale-105"
             >
-              <i className="fa-brands fa-medium-m"></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 640"
+                className="w-5 h-5"
+              >
+                <path d="M465.4 96C508.8 96 544 131.2 544 174.6L544 258.4C542.1 258.3 540.2 258.2 538.3 258.2L537.9 258.2C527.9 258.2 515.6 260.6 506.8 265C496.8 269.6 488.1 276.5 480.8 285.6C469 300.2 461.9 319.9 460.2 342C460.1 342.7 460.1 343.3 460 344C459.9 344.7 459.9 345.2 459.9 345.9C459.8 347.1 459.8 348.3 459.8 349.5C459.8 351.4 459.7 353.3 459.8 355.3C461 405.4 488 445.5 536.1 445.5C538.8 445.5 541.4 445.4 544 445.1L544 465.5C544 508.9 508.8 544.1 465.4 544.1L174.6 544C131.2 544 96 508.8 96 465.4L96 174.6C96 131.2 131.2 96 174.6 96L465.4 96zM178.3 202.9L178.6 203C191.8 206 198.4 210.4 198.4 226.4L198.4 413.6C198.4 429.6 191.7 434 178.5 437L178.2 437.1L178.2 439.9L231 439.9L231 437.1L230.7 437C217.5 434 210.8 429.6 210.8 413.6L210.8 237.3L296.9 439.8L301.8 439.8L390.4 231.6L390.4 418.2C389.3 430.8 382.6 434.7 370.7 437.4L370.4 437.5L370.4 440.2L462.3 440.2L462.3 437.5L462 437.4C450.1 434.7 443.3 430.8 442.1 418.2L442 226.4L442.1 226.4C442.1 210.4 448.8 206 462 203L462.3 202.9L462.3 200.2L390.1 200.2L323.1 357.6L256.1 200.2L178.3 200.2L178.3 202.9zM544 404.3C518.9 396.9 501 369.2 502.8 336.5L502.8 336.5L543.9 336.5L543.9 404.3zM537.6 268.7C539.9 268.7 542 269 544 269.6L544 327L503.8 327C505.3 293.4 517.4 269.1 537.6 268.7z" />
+              </svg>
               <span className="font-semibold text-gray-700 text-sm sm:text-base">
                 Medium
               </span>
@@ -319,14 +361,14 @@ const BlogPage: React.FC = () => {
               href="https://substack.com/@nutriipal"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-all border border-gray-200 hover:scale-105"
             >
               <img
                 src="https://cdn.simpleicons.org/substack/FF6719"
                 alt="Substack"
                 width="20"
                 height="20"
-              ></img>
+              />
               <span className="font-semibold text-gray-700 text-sm sm:text-base">
                 Substack
               </span>
